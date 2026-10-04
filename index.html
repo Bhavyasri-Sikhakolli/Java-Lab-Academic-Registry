@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B1F44">
+<title>Java Lab Portfolio · Sikhakolli Bhavyasri</title>
+<meta name="description" content="A 9-module Java academic lab portfolio: language metrics, JDK setup, types, classes, strings, inheritance, exceptions, streams and threads.">
+<style>
+:root{
+  --frost:#F4F8FB;        /* Cool Frost White – canvas */
+  --navy:#0B1F44;         /* Deep Midnight Navy – header, h1, primary actions */
+  --slate:#4A6A8A;        /* Slate Steel Blue – subheadings, labels, borders, tags */
+  --lav:#7B6BB8;          /* Muted Lavender – links, hovers, active outlines */
+  --lav-soft:#E9E5F5;
+  --ink:#1E2B3C;
+  --code-bg:#E4EBF2;      /* soft blue-gray code tint */
+  --comment:#6B7785;      /* soft quiet gray */
+  --card:#FFFFFF;
+  --line:#C9D5E1;
+  --mono:ui-monospace,SFMono-Regular,"JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--frost);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--lav);text-underline-offset:3px}
+a:hover{color:var(--navy);text-decoration-color:var(--lav)}
+:focus-visible{outline:2px solid var(--lav);outline-offset:2px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:var(--frost);display:flex;align-items:center;gap:20px;padding:12px 28px;border-bottom:3px solid var(--slate)}
+.brand{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.brand b{font-size:17px;letter-spacing:.02em;white-space:nowrap}
+.brand span{font-size:12px;color:#B9C6D8;letter-spacing:.08em;text-transform:uppercase}
+.search{margin-left:auto;position:relative;width:min(420px,48vw)}
+.search input{width:100%;padding:10px 40px 10px 38px;border-radius:999px;border:1.5px solid var(--slate);background:#13294F;color:var(--frost);font:inherit;font-size:15px}
+.search input::placeholder{color:#9FB0C6}
+.search input:hover{border-color:var(--lav)}
+.search input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 3px rgba(123,107,184,.35)}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:#9FB0C6;fill:none;stroke-width:2}
+.search kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font:12px var(--mono);color:#9FB0C6;border:1px solid var(--slate);border-radius:5px;padding:0 6px}
+.search.has-text kbd{display:none}
+
+/* ---------- student profile strip ---------- */
+.profile{max-width:1320px;margin:0 auto;padding:14px 28px 0;display:flex;align-items:center;gap:10px 28px;flex-wrap:wrap}
+.p-name{display:flex;flex-direction:column;line-height:1.2;padding-right:24px;border-right:2px solid var(--line)}
+.p-lab,.profile dt{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);font-weight:700}
+.p-name b{color:var(--navy);font-size:18px}
+.profile dl{display:flex;flex-wrap:wrap;gap:8px 12px;margin:0}
+.profile dl>div{border:1.5px solid var(--slate);border-radius:10px;padding:3px 12px;background:#fff}
+.profile dd{margin:0;font-weight:600;color:var(--ink);font-size:14.5px}
+@media (max-width:560px){.profile{padding:12px 16px 0}.p-name{border-right:0;padding-right:0;width:100%}}
+
+/* ---------- layout ---------- */
+.shell{display:grid;grid-template-columns:292px minmax(0,1fr);max-width:1320px;margin:0 auto}
+.rail{position:sticky;top:61px;align-self:start;height:calc(100vh - 61px);overflow:auto;padding:28px 12px 28px 28px}
+.rail h2{margin:0 0 14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);font-weight:700}
+.timeline{list-style:none;margin:0;padding:0 0 0 18px;position:relative}
+.timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.timeline li{position:relative;margin:0 0 4px}
+.timeline li::before{content:"";position:absolute;left:-18px;top:17px;width:12px;height:12px;border-radius:50%;background:var(--frost);border:2px solid var(--slate);transition:.15s}
+.timeline li:hover::before{border-color:var(--lav)}
+.timeline li.active::before{background:var(--lav);border-color:var(--lav);box-shadow:0 0 0 4px var(--lav-soft)}
+.timeline button{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;padding:9px 12px;border-radius:10px;border:1.5px solid transparent;transition:.15s}
+.timeline button:hover{border-color:var(--lav);background:#fff}
+.timeline li.active button{border-color:var(--lav);background:#fff}
+.timeline button:focus-visible{outline:2px solid var(--lav)}
+.t-top{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate)}
+.t-title{display:block;font-size:14.5px;font-weight:600;color:var(--navy);line-height:1.3;margin-top:1px}
+.badge{margin-left:auto;font-size:11px;background:var(--lav-soft);color:var(--navy);border-radius:999px;padding:0 7px;font-weight:700;letter-spacing:0}
+.timeline li.hidden{display:none}
+.rail-note{margin-top:22px;font-size:12.5px;color:var(--slate);border-top:1px solid var(--line);padding-top:14px}
+
+main{padding:36px 40px 80px 28px;min-width:0}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:end;margin-bottom:26px}
+.bignum{font-size:96px;line-height:.8;font-weight:800;color:transparent;-webkit-text-stroke:2px var(--slate);font-family:Georgia,"Times New Roman",serif;opacity:.55;margin-bottom:-2px}
+.hero .wk{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);font-weight:700}
+h1{margin:2px 0 0;color:var(--navy);font-size:clamp(27px,3.6vw,40px);line-height:1.12;letter-spacing:-.01em}
+.lede{grid-column:1/-1;margin:10px 0 0;max-width:68ch;color:#3A4A5E;font-size:17px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;grid-column:1/-1}
+.tag{font-size:12.5px;color:var(--slate);border:1.5px solid var(--slate);border-radius:999px;padding:1px 10px;background:transparent;font-weight:600}
+
+.concept{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:0;background:var(--card);border:1.5px solid var(--slate);border-radius:16px;overflow:hidden;margin:0 0 34px}
+.concept .c-main{padding:22px 26px}
+.concept .c-side{padding:22px 24px;background:var(--lav-soft);border-left:1.5px solid var(--slate)}
+.label{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);font-weight:700;margin:0 0 8px}
+.concept h3,.topic h3{color:var(--slate);margin:0 0 8px;font-size:19px;line-height:1.3}
+.concept p{margin:0 0 10px}
+.concept ul{margin:0;padding-left:18px}
+.concept li{margin:3px 0}
+.concept .c-side li{font-size:14.5px}
+
+.topic{margin:0 0 38px;padding-left:22px;border-left:3px solid var(--line);position:relative}
+.topic::before{content:"";position:absolute;left:-8px;top:6px;width:13px;height:13px;border-radius:3px;background:var(--frost);border:2px solid var(--slate);transform:rotate(45deg)}
+.topic:nth-of-type(even){margin-left:26px}
+.topic .note{margin:0 0 12px;color:#3A4A5E;max-width:74ch}
+.mini-tags{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.mini-tags .tag{font-size:11.5px;padding:0 8px}
+
+.codecard,.termcard{border:1.5px solid var(--slate);border-radius:12px;overflow:hidden}
+.codecard{background:var(--code-bg)}
+.bar{display:flex;align-items:center;gap:10px;padding:7px 12px;border-bottom:1.5px solid var(--slate);font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--slate)}
+.codecard .bar{background:#D6E0EA}
+.bar .copy{margin-left:auto;all:unset;box-sizing:border-box;cursor:pointer;background:var(--navy);color:var(--frost);font:700 11.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:7px;border:1.5px solid var(--navy);transition:.15s}
+.bar .copy:hover{background:var(--frost);color:var(--lav);border-color:var(--lav)}
+.bar .copy:focus-visible{outline:2px solid var(--lav);outline-offset:2px}
+pre{margin:0;padding:14px 16px;overflow:auto;font:13.5px/1.6 var(--mono);tab-size:4;color:var(--ink)}
+pre code{font:inherit}
+.k{color:var(--navy);font-weight:800}          /* Java keywords */
+.v{color:var(--slate)}                         /* variables & methods */
+.c{color:var(--comment);font-style:italic}     /* comments */
+.s{color:#2B3A4E}
+
+.termcard{background:#fff;margin-top:14px;max-width:calc(100% - 28px);margin-left:28px}
+.termcard .bar{background:#EEF2F7}
+.dots{display:inline-flex;gap:5px}
+.dots i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--slate);display:block}
+.termcard pre{max-height:340px;font-size:13px}
+.p{color:var(--slate);font-weight:700}
+.err{color:var(--navy);font-weight:700}
+
+.xwrap{overflow:auto;border:1.5px solid var(--slate);border-radius:12px;background:#fff;margin:14px 0 4px;max-height:560px}
+table{border-collapse:separate;border-spacing:0;font-size:14px;width:100%}
+th,td{padding:8px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+th{position:sticky;top:0;background:var(--code-bg);color:var(--slate);font-size:12px;letter-spacing:.08em;text-transform:uppercase;z-index:1}
+td:first-child,th:first-child{position:sticky;left:0;background:#F0F4F8;font-weight:700;color:var(--slate);min-width:170px;z-index:2}
+th:first-child{background:#D6E0EA;z-index:3}
+td{min-width:150px}
+tr:last-child td{border-bottom:0}
+.verdict{margin-top:20px;padding:16px 20px;background:var(--card);border:1.5px solid var(--slate);border-left:6px solid var(--lav);border-radius:12px}
+
+.empty{padding:60px 20px;text-align:center;color:var(--slate)}
+.empty b{display:block;color:var(--navy);font-size:20px;margin-bottom:6px}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;background:var(--navy);color:var(--frost);padding:9px 18px;border-radius:9px;font-weight:700;border:1.5px solid var(--navy);margin-top:12px;transition:.15s}
+.btn:hover{background:var(--frost);color:var(--lav);border-color:var(--lav)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:44px;padding-top:20px;border-top:1px solid var(--line)}
+.pager .btn[disabled]{opacity:.35;cursor:default;pointer-events:none}
+footer{padding:26px 28px 40px;text-align:center;font-size:13px;color:var(--slate)}
+
+@media (max-width:900px){
+  .topbar{position:static}                      /* free up screen height: only the module strip stays pinned */
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .rail{position:sticky;top:0;z-index:15;height:auto;padding:8px 16px;background:var(--frost);border-bottom:1px solid var(--line)}
+  .rail h2,.rail-note{display:none}
+  .timeline{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .timeline::before{display:none}
+  .timeline li{margin:0;flex:0 0 auto;scroll-snap-align:start}
+  .timeline li::before{display:none}
+  .timeline button{border:1.5px solid var(--line);background:#fff;min-width:118px;min-height:46px;padding:6px 12px}
+  .t-title{font-size:13px}
+  .search input{font-size:16px}                 /* 16px stops iOS zooming in on focus */
+  main{padding:22px 16px 60px}
+  .concept{grid-template-columns:minmax(0,1fr)}
+  .concept .c-main,.concept .c-side{min-width:0;overflow-wrap:anywhere}
+  .concept .c-side{border-left:0;border-top:1.5px solid var(--slate)}
+  .topic:nth-of-type(even){margin-left:0}
+  .termcard{margin-left:0;max-width:100%}
+  .bignum{font-size:64px}
+}
+@media (max-width:560px){
+  .topbar{padding:10px 14px;gap:10px}
+  .brand span{display:none}
+  .search{width:auto;flex:1}
+  .topic{padding-left:16px}
+  pre{font-size:12.5px;padding:12px 12px}
+  h1{overflow-wrap:anywhere}
+  /* compact student strip */
+  .profile{padding:10px 16px 0;gap:6px}
+  .p-name{flex-direction:row;align-items:baseline;gap:8px}
+  .p-name b{font-size:17px}
+  .profile dl{gap:6px;width:100%}
+  .profile dl>div{padding:2px 9px;border-radius:8px}
+  .profile dt{font-size:9.5px}
+  .profile dd{font-size:13px}
+  .p-college{flex:1 1 100%}
+  /* tables: narrower pinned column + tighter cells so more of the matrix is visible */
+  table{font-size:13px}
+  th,td{padding:7px 9px}
+  td:first-child,th:first-child{min-width:112px}
+  td{min-width:132px}
+}
+@media (pointer:coarse){
+  .bar .copy{min-height:40px;min-width:68px;display:inline-flex;align-items:center;justify-content:center}
+  .btn{min-height:44px;display:inline-flex;align-items:center}
+  .search kbd{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><b>Java Lab Portfolio</b><span>9 modules · Roll No. 25EU02121</span></div>
+  <label class="search" id="searchBox">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Filter topics…" title="Try: super, finally, join, constructor" aria-label="Filter lab topics" autocomplete="off">
+    <kbd aria-hidden="true">/</kbd>
+  </label>
+</header>
+
+<section class="profile" aria-label="Student details">
+  <div class="p-name"><span class="p-lab">Student</span><b>Sikhakolli Bhavyasri</b></div>
+  <dl>
+    <div><dt>Roll No.</dt><dd>25EU02121</dd></div>
+    <div><dt>Department</dt><dd>AI</dd></div>
+    <div><dt>Branch</dt><dd>AI&amp;ML</dd></div>
+    <div><dt>Section</dt><dd>B</dd></div>
+    <div class="p-college"><dt>College</dt><dd>Siddhartha Academy of Higher Education</dd></div>
+  </dl>
+</section>
+
+<div class="shell">
+  <nav class="rail" aria-label="Module timeline">
+    <h2>Lab timeline</h2>
+    <ol class="timeline" id="timeline"></ol>
+    <p class="rail-note">Weeks 1–3 and 6–11 of the lab record, condensed into nine modules.</p>
+  </nav>
+  <main id="main" tabindex="-1"></main>
+</div>
+<footer>Java Academic Portfolio · Sikhakolli Bhavyasri · Roll No. 25EU02121 · Dept. of AI · Branch AI&amp;ML · Section B<br>Siddhartha Academy of Higher Education</footer>
+
+<script>
+/* ================= DATA ================= */
+const R = String.raw;
+
+const LANGS = ["Java","C","C++","Python","JavaScript"];
+const MATRIX = [
+["Language / Scripting","Programming","Programming","Programming","Scripting","Scripting"],
+["Open source / Commercial","Partly Open Source","Open Source","Open Source","Open Source","Partly Open Source"],
+["Compiler / Interpreter","Compiler","Compiler","Compiler","Interpreter","Interpreter"],
+["OOP support","Yes","No","Yes","Yes","Yes"],
+["Developer organization","Sun Microsystems","AT&T Bell Laboratories","AT&T Bell Laboratories","Python Software Foundation","Netscape"],
+["Developer (person)","James Gosling","Dennis Ritchie","Bjarne Stroustrup","Guido van Rossum","Brendan Eich"],
+["Current major version (2026)","Java 26","C23","C++26","Python 3.14","ECMAScript 2025 (ES16)"],
+["Primary purpose","Write once, run anywhere (WORA)","Write and implement the UNIX operating system","Add OOP features to the existing C language","Versatile, general-purpose programming language","Add interactivity and dynamic behavior to websites"],
+["Common applications","Android apps, enterprise and financial systems, cloud","OS, DBMS, embedded systems, compilers","Low-level hardware control, high execution speed, efficient memory management","Data science, ML, AI, web development","Web and mobile development, VR, AI"],
+["Database support","Yes","Yes","Yes","Yes","Yes"],
+["Memory management","Garbage collection","Manual","Manual","Garbage collection","Garbage collection"],
+["Security features","High","Low","Low","High","Medium"],
+["Performance","Fast / moderate","Maximum speed","Maximum speed","Slower than compiled languages","Moderate"],
+["Platform independence","Yes","No","No","Yes","Yes"],
+["Other important features","Strong JVM ecosystem, multithreading support","Small language size, direct hardware access","Templates, STL (Standard Template Library)","Extensive libraries, rapid prototyping","Event-driven, asynchronous programming, runs in browsers"],
+["Ease of learning","Moderate","Hard","Very hard","Very easy","Moderate"],
+["Popular IDE","IntelliJ IDEA","Visual Studio","CLion","PyCharm","WebStorm"],
+["Compilation output","Bytecode","Machine code","Machine code","Bytecode","Just-in-time machine code"],
+["Advantages","High security","Exceptional execution speed","Multi-paradigm support","Simplicity in learning","Interactive web pages, large ecosystem, cross-platform support"],
+["Limitations","Higher memory usage, slower startup time","No built-in OOP, manual memory management","Complex syntax, difficult debugging","Lower execution speed, higher memory consumption","Browser compatibility issues, dynamic typing can cause runtime errors"]
+];
+const SUIT = [
+["System programming","C","Direct hardware access, high performance, widely used for operating systems."],
+["Enterprise applications","Java","Secure, scalable, platform-independent, and widely used in enterprise software."],
+["Web development","JavaScript","Standard language for interactive web applications, supported by all modern browsers."],
+["Artificial intelligence","Python","Rich ecosystem of AI and ML libraries such as TensorFlow, PyTorch and scikit-learn."],
+["Mobile application development","Java","Traditionally used for Android development and still widely supported."]
+];
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function matrixHTML(){
+  let h='<div class="xwrap" tabindex="0" aria-label="Comparative matrix"><table><thead><tr><th>Attribute</th>'+LANGS.map(l=>`<th>${l}</th>`).join("")+'</tr></thead><tbody>';
+  MATRIX.forEach(r=>{h+="<tr>"+r.map(c=>`<td>${esc(c)}</td>`).join("")+"</tr>"});
+  h+="</tbody></table></div>";
+  h+='<p class="label" style="margin-top:22px">Most suitable language by requirement</p><div class="xwrap"><table><thead><tr><th>Requirement</th><th>Most suitable</th><th>Reason</th></tr></thead><tbody>';
+  SUIT.forEach(r=>{h+="<tr>"+r.map(c=>`<td>${esc(c)}</td>`).join("")+"</tr>"});
+  h+="</tbody></table></div>";
+  h+='<div class="verdict"><p class="label" style="margin:0 0 6px">Conclusion</p>Each language has unique strengths. C and C++ suit system-level work thanks to performance and direct memory control; Java is the choice for enterprise and Android work because of platform independence, security and reliability; Python leads in AI, data science and rapid development; JavaScript is the backbone of interactive web development. No single language is best for every task. The right choice depends on project requirements, performance needs and development goals.</div>';
+  return h;
+}
+function streamTableHTML(){
+  const rows=[["Unit of data","8-bit byte","16-bit Unicode character"],["Abstract base classes","InputStream / OutputStream","Reader / Writer"],["Typical classes (this lab)","ByteArrayInputStream, FileInputStream, FileOutputStream","InputStreamReader, FileReader, FileWriter, PrintWriter"],["Best for","Binary data: images, audio, raw files","Human-readable text"],["Lab demo","Copy a JPEG with a 1024-byte buffer","Count characters, words and lines in a text file"]];
+  let h='<div class="xwrap"><table><thead><tr><th>Aspect</th><th>Byte streams</th><th>Character streams</th></tr></thead><tbody>';
+  rows.forEach(r=>{h+="<tr>"+r.map(c=>`<td>${esc(c)}</td>`).join("")+"</tr>"});
+  return h+"</tbody></table></div>";
+}
+function threadTableHTML(){
+  const rows=[["How it is defined","class CustomThread extends Thread","class CustomRunnable implements Runnable"],["Entry point","Override run(), call start() on the object","Pass the Runnable to new Thread(r, name), call start()"],["Inheritance","Uses up the single superclass slot","Leaves the superclass free; can extend another class"],["Naming","thread.setName(...) or getName()","Name supplied in the Thread constructor"]];
+  let h='<div class="xwrap"><table><thead><tr><th>Aspect</th><th>Extending Thread</th><th>Implementing Runnable</th></tr></thead><tbody>';
+  rows.forEach(r=>{h+="<tr>"+r.map(c=>`<td>${esc(c)}</td>`).join("")+"</tr>"});
+  return h+"</tbody></table></div>";
+}
+
+const MODULES = [
+/* ---------------- 1 ---------------- */
+{ id:1, week:"Week 1", title:"Cross-Platform Language Metrics",
+  lede:"A 20-attribute comparison of Java, C, C++, Python and JavaScript, closing with a requirement-to-language recommendation.",
+  tags:["comparison","JVM","bytecode","WORA"],
+  concept:{ h:"Why compare languages?", p:["Choosing a language is a trade-off between speed, safety, portability and ecosystem. The matrix below records each language's origin, execution model, memory strategy and best-fit domain."], pts:["Java and Python compile to bytecode; C and C++ compile to machine code; JavaScript uses JIT compilation.","Java, Python and JavaScript are garbage collected; C and C++ manage memory by hand.","Java's WORA promise comes from running bytecode on the JVM."] ,side:"Reading guide", sidePts:["Scroll the matrix sideways on small screens.","The first column stays pinned.","Use the filter box to find an attribute across all modules."]},
+  topics:[
+   { t:"Write once, run anywhere", note:"The compile-then-interpret pipeline behind Java's platform independence: javac produces portable bytecode that any JVM can run.", tags:["javac","bytecode","JVM"], lang:"java",
+     code:R`// Hello.java - the same Hello.class runs on any OS with a JVM
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Write once, run anywhere");
+    }
+}
+// javac Hello.java  ->  Hello.class (bytecode, not machine code)
+// java Hello        ->  the JVM interprets / JIT-compiles the bytecode`,
+     log:R`C:\25EU02121>javac Hello.java
+
+C:\25EU02121>java Hello
+Write once, run anywhere` },
+   { t:"Comparative matrix: Java, C, C++, Python, JavaScript", note:"Twenty attributes compared side by side, followed by the best-fit language for five common requirements.", tags:["matrix","comparison","memory management","performance","security"], extraHTML:matrixHTML, search:"language scripting open source compiler interpreter oop developer organization version purpose applications database memory management security performance platform independence ease of learning ide compilation output advantages limitations system programming enterprise web development artificial intelligence mobile" }
+  ]},
+/* ---------------- 2 ---------------- */
+{ id:2, week:"Week 2", title:"OpenJDK Setup on Windows",
+  lede:"Installing OpenJDK (Eclipse Adoptium), wiring JAVA_HOME and PATH, and compiling the first program.",
+  tags:["OpenJDK","JAVA_HOME","PATH","Windows"],
+  concept:{ h:"What is OpenJDK?", p:["OpenJDK is the open-source reference implementation of the Java Platform. It ships the compiler (javac), the launcher (java) and the class libraries. Windows needs two environment settings so the shell can find them."], pts:["JAVA_HOME points to the JDK root folder.","PATH gets %JAVA_HOME%\\bin so javac and java resolve from any directory.","Always verify in a new Command Prompt; old windows keep stale variables."], side:"Software required", sidePts:["Windows OS (64-bit)","Internet connection","OpenJDK installer (openjdk.org or Eclipse Adoptium)","Command Prompt"]},
+  topics:[
+   { t:"Environment variables", note:"Set JAVA_HOME as a system variable, then append its bin folder to Path.", tags:["sysdm.cpl","System Variables","Path"], lang:"cmd",
+     code:R`:: Win + R -> sysdm.cpl -> Advanced -> Environment Variables
+:: System variables -> New
+Variable Name  : JAVA_HOME
+Variable Value : C:\Program Files\Eclipse Adoptium\jdk-21
+
+:: System variables -> Path -> Edit -> New
+%JAVA_HOME%\bin`,
+     log:R`:: (nothing is printed; OK, OK, OK to save)
+:: open a NEW Command Prompt so the change is picked up` },
+   { t:"Installation validation", note:"Confirm that both the runtime and the compiler resolve and report the same version.", tags:["java --version","javac --version"], lang:"cmd",
+     code:R`java --version
+javac --version`,
+     log:R`C:\>java --version
+openjdk 21.0.11
+
+C:\>javac --version
+javac 21.0.11` },
+   { t:"Hello World compilation sequence", note:"Create, compile and run. Compilation emits Hello.class; the java launcher executes it.", tags:["javac","java","Hello.class"], lang:"java",
+     code:R`// Hello.java
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+}
+// 1) Save as Hello.java
+// 2) javac Hello.java   -> creates Hello.class
+// 3) java Hello         -> runs it`,
+     log:R`C:\work>javac Hello.java
+
+C:\work>java Hello
+Hello World` }
+  ]},
+/* ---------------- 3 ---------------- */
+{ id:3, week:"Week 2", title:"Oracle JDK Setup on Windows",
+  lede:"The same toolchain from Oracle's installer: JDK 25, JAVA_HOME validation logs and the Hello compile cycle.",
+  tags:["Oracle JDK","JDK 25","JAVA_HOME","validation"],
+  concept:{ h:"Oracle JDK vs OpenJDK in practice", p:["The workflow is identical: install, set JAVA_HOME, extend PATH, verify. Oracle's installer places the JDK under C:\\Program Files\\Java, and the version banner reads java rather than openjdk."], pts:["Installer path: C:\\Program Files\\Java\\jdk-25.0.3","The validation command is echo %JAVA_HOME%.","javac --version confirms the compiler matches the runtime."], side:"Steps at a glance", sidePts:["Download JDK 25 from oracle.com","Run the .exe installer","Set JAVA_HOME and Path","Verify, then compile Hello.java"]},
+  topics:[
+   { t:"Install and first verification", note:"Right after the installer finishes, both commands should already report the JDK version.", tags:["installer",".exe","java --version"], lang:"cmd",
+     code:R`:: Open Command Prompt
+java --version
+javac --version`,
+     log:R`C:\>java --version
+java 25.0.3
+
+C:\>javac --version
+javac 25.0.3` },
+   { t:"JAVA_HOME and PATH configuration", note:"Locate the JDK folder, define JAVA_HOME and add the bin directory to Path.", tags:["JAVA_HOME","Path","%JAVA_HOME%\\bin"], lang:"cmd",
+     code:R`:: Step 1 - installation path
+C:\Program Files\Java\jdk-25.0.3
+
+:: Step 2 - System Variables -> New
+Variable Name  : JAVA_HOME
+Variable Value : C:\Program Files\Java\jdk-25.0.3
+
+:: Step 3 - System Variables -> Path -> Edit -> New
+%JAVA_HOME%\bin`,
+     log:R`:: Click OK -> OK -> OK to commit all dialogs` },
+   { t:"JAVA_HOME validation log", note:"Open a fresh prompt and echo the variable, then re-check both tools.", tags:["echo","validation"], lang:"cmd",
+     code:R`echo %JAVA_HOME%
+java --version
+javac --version`,
+     log:R`C:\>echo %JAVA_HOME%
+C:\Program Files\Java\jdk-25.0.3
+
+C:\>java --version
+java 25.0.3
+
+C:\>javac --version
+javac 25.0.3` },
+   { t:"Hello compilation sequence", note:"Compile Hello.java to Hello.class, then run it.", tags:["javac","java"], lang:"java",
+     code:R`public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello");
+    }
+}
+// javac Hello.java  -> Hello.class
+// java Hello`,
+     log:R`C:\work>javac Hello.java
+
+C:\work>java Hello
+Hello` }
+  ]},
+/* ---------------- 4 ---------------- */
+{ id:4, week:"Week 3", title:"Primitive Types & Casting",
+  lede:"Eight primitives, automatic widening, explicit narrowing with truncation and overflow, and why reserved words cannot be identifiers.",
+  tags:["primitives","widening","narrowing","keywords"],
+  concept:{ h:"Types, conversion and the compiler's limits", p:["Java has eight primitive types. Assigning a smaller type to a larger one is widened automatically. The reverse needs an explicit cast and can lose information: fractions are truncated and out-of-range integers wrap around."], pts:["Widening order: byte → short → int → long → float → double; char → int.","Narrowing: (int) 99.99 gives 99, and (byte) 130 gives -126.","Reserved keywords such as class, if and while cannot name variables."], side:"Also in Week 3", sidePts:["Arithmetic on int and floating-point values","Character ↔ ASCII/Unicode conversion","Boolean expressions and swapping with a temp variable","if-else (even/odd, larger of two) and a for loop 1–10"]},
+  topics:[
+   { t:"Primitive data types", note:"One variable of each primitive type, printed to the console.", tags:["byte","short","int","long","float","double","char","boolean"], lang:"java",
+     code:R`public class primitivedt {
+    public static void main(String[] args) {
+        byte b = 126;
+        short s = 32000;
+        int i = 2147483640;
+        long l = 9223372036854775800L;
+        float f = 3.14f;
+        double d = 3.14159265359;
+        char c = 'A';
+        boolean flag1 = true, flag2 = false;
+
+        System.out.println("--- Java Primitive Data Types ---");
+        System.out.println("Byte Value:    " + b);
+        System.out.println("Short Value:   " + s);
+        System.out.println("Int Value:     " + i);
+        System.out.println("Long Value:    " + l);
+        System.out.println("Float Value:   " + f);
+        System.out.println("Double Value:  " + d);
+        System.out.println("Char Value:    " + c);
+        System.out.println("Boolean Value 1: " + flag1);
+        System.out.println("Boolean Value 2: " + flag2);
+    }
+}`,
+     log:R`C:\Users\User\Desktop\java subs\java codes>javac primitivedt.java
+
+C:\Users\User\Desktop\java subs\java codes>java primitivedt
+--- Java Primitive Data Types ---
+Byte Value:    126
+Short Value:   32000
+Int Value:     2147483640
+Long Value:    9223372036854775800
+Float Value:   3.14
+Double Value:  3.14159265359
+Char Value:    A
+Boolean Value 1: true
+Boolean Value 2: false` },
+   { t:"Automatic widening promotions", note:"A smaller type flows into a larger one with no cast and no data loss. Note that an integer widened to float prints with a decimal point.", tags:["widening","implicit conversion"], lang:"java",
+     code:R`public class widconver {
+    public static void main(String[] args) {
+        byte original = 42;
+        short toShort = original;   // byte  -> short
+        int toInt = toShort;        // short -> int
+        long toLong = toInt;        // int   -> long
+        float toFloat = toLong;     // long  -> float
+        double toDouble = toFloat;  // float -> double
+
+        System.out.println("Original byte value: " + original);
+        System.out.println("Widened to short:    " + toShort);
+        System.out.println("Widened to int:      " + toInt);
+        System.out.println("Widened to long:     " + toLong);
+        System.out.println("Widened to float:    " + toFloat);
+        System.out.println("Widened to double:   " + toDouble);
+
+        char ch = 'A';
+        int code = ch;              // char -> int (Unicode value)
+        System.out.println("Original char value: " + ch);
+        System.out.println("Widened to int:      " + code);
+    }
+}`,
+     log:R`C:\Users\User\Desktop\java subs\java codes>javac widconver.java
+
+C:\Users\User\Desktop\java subs\java codes>java widconver
+Original byte value: 42
+Widened to short:    42
+Widened to int:      42
+Widened to long:     42
+Widened to float:    42.0
+Widened to double:   42.0
+Original char value: A
+Widened to int:      65` },
+   { t:"Explicit narrowing and truncation", note:"A cast tells the compiler you accept possible loss: the fraction is dropped, and 130 does not fit in a byte (range −128..127) so it wraps to −126.", tags:["narrowing","cast","truncation","overflow"], lang:"java",
+     code:R`public class narconver {
+    public static void main(String[] args) {
+        double dbl = 99.99;
+        int truncated = (int) dbl;      // fraction discarded, not rounded
+        System.out.println("Original double value: " + dbl);
+        System.out.println("Narrowed int value   : " + truncated);
+
+        int big = 130;
+        byte wrapped = (byte) big;      // 130 - 256 = -126
+        System.out.println("Original int value   : " + big);
+        System.out.println("Narrowed byte value  : " + wrapped);
+
+        int code = 65;
+        char letter = (char) code;      // Unicode 65 -> 'A'
+        System.out.println("Original int value   : " + code);
+        System.out.println("Narrowed char value  : " + letter);
+    }
+}`,
+     log:R`C:\Users\User\Desktop\java subs\java codes>javac narconver.java
+
+C:\Users\User\Desktop\java subs\java codes>java narconver
+Original double value: 99.99
+Narrowed int value   : 99
+Original int value   : 130
+Narrowed byte value  : -126
+Original int value   : 65
+Narrowed char value  : A` },
+   { t:"Reserved keyword compiler limits", note:"Keywords are part of the grammar, so using one as a variable name derails the parser. Three illegal declarations produced thirteen errors.", tags:["reserved words","identifiers","compile error"], lang:"java",
+     code:R`public class keyword {
+    public static void main(String[] args) {
+        // Legal identifiers
+        int classNumber = 10;
+        double ifValue = 5.5;
+        String whileText = "Java";
+
+        // Illegal: reserved keywords cannot be identifiers
+        int class = 10;           // line 12
+        double if = 5.5;          // line 13
+        String while = "Java";    // line 14
+    }
+}`,
+     log:R`C:\Users\User\Desktop\java subs\java codes>javac keyword.java
+keyword.java:12: error: not a statement
+        int class = 10;
+        ^
+keyword.java:12: error: ';' expected
+keyword.java:12: error: <identifier> expected
+keyword.java:13: error: not a statement
+        double if = 5.5;
+        ^
+keyword.java:13: error: ';' expected
+keyword.java:13: error: '(' expected
+keyword.java:13: error: illegal start of expression
+keyword.java:13: error: ')' expected
+keyword.java:14: error: not a statement
+        String while = "Java";
+        ^
+keyword.java:14: error: ';' expected
+keyword.java:14: error: '(' expected
+keyword.java:14: error: illegal start of expression
+keyword.java:14: error: ')' expected
+13 errors`, caption:"The page shows the compile-error screenshot from the record as text. The source above is rebuilt to match that log." }
+  ]},
+/* ---------------- 5 ---------------- */
+{ id:5, week:"Week 6", title:"Core Class Architecture",
+  lede:"Classes, object arrays, overloaded constructors, constructor chaining with this(), the this keyword and shared static counters.",
+  tags:["class","object","constructor","this","static"],
+  concept:{ h:"Classes as blueprints, objects as instances", p:["A class bundles fields and methods. new allocates an object on the heap and runs a constructor. Constructors can be overloaded, and one constructor can delegate to another with this(...). A static field belongs to the class, so every instance shares one copy."], pts:["this refers to the current object and resolves field/parameter name clashes.","this(...) must be the first statement of a constructor.","Student.count is read through the class name, not an instance."], side:"Week 6 also covers", sidePts:["Object references and == comparison","Methods, overloading, objects as parameters and return values","final, nested and inner classes, garbage collection"]},
+  topics:[
+   { t:"Class fundamentals", note:"Fields describe state, display() describes behaviour; main builds an object and fills it in.", tags:["class","fields","method"], lang:"java",
+     code:R`class Student {
+    int rollNo;
+    String name;
+    String branch;
+    double cgpa;
+
+    void display() {
+        System.out.println("Roll Number: " + rollNo);
+        System.out.println("Name: " + name);
+        System.out.println("Branch: " + branch);
+        System.out.println("CGPA: " + cgpa);
+    }
+}
+
+public class StudentInfo {
+    public static void main(String[] args) {
+        Student s = new Student();
+        s.rollNo = 101;
+        s.name = "Raina";
+        s.branch = "CSE-AIML";
+        s.cgpa = 9.2;
+        s.display();
+    }
+}`,
+     log:R`Roll Number: 101
+Name: Raina
+Branch: CSE-AIML
+CGPA: 9.2` },
+   { t:"Object arrays", note:"new Student[5] allocates five null references; each slot still needs its own new Student().", tags:["array","Scanner","loop"], lang:"java",
+     code:R`import java.util.Scanner;
+
+class Student {
+    int rollNo;
+    String name;
+    String branch;
+    void display() {
+        System.out.println("Roll Number: " + rollNo);
+        System.out.println("Name: " + name);
+        System.out.println("Branch: " + branch);
+        System.out.println();
+    }
+}
+
+public class StudentArray {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Student[] students = new Student[5];
+
+        for (int i = 0; i < 5; i++) {
+            students[i] = new Student();   // each slot needs an object
+            System.out.println("Enter details of Student " + (i + 1));
+            System.out.print("Roll Number: ");
+            students[i].rollNo = sc.nextInt();
+            sc.nextLine();                 // consume the leftover newline
+            System.out.print("Name: ");
+            students[i].name = sc.nextLine();
+            System.out.print("Branch: ");
+            students[i].branch = sc.nextLine();
+        }
+
+        System.out.println("\nStudent Details:");
+        for (int i = 0; i < 5; i++) {
+            students[i].display();
+        }
+        sc.close();
+    }
+}`,
+     log:R`Enter details of Student 1
+Roll Number: 101
+Name: Raina
+Branch: CSE-AIML
+Enter details of Student 2
+Roll Number: 102
+Name: Rinku
+Branch: CSE
+Enter details of Student 3
+Roll Number: 103
+Name: Ananya
+Branch: CSE-AIML
+Enter details of Student 4
+Roll Number: 104
+Name: Kiran
+Branch: ECE
+Enter details of Student 5
+Roll Number: 105
+Name: Priya
+Branch: IT
+
+Student Details:
+Roll Number: 101
+Name: Raina
+Branch: CSE-AIML
+
+Roll Number: 102
+Name: Rinku
+Branch: CSE
+
+Roll Number: 103
+Name: Ananya
+Branch: CSE-AIML
+
+Roll Number: 104
+Name: Kiran
+Branch: ECE
+
+Roll Number: 105
+Name: Priya
+Branch: IT` },
+   { t:"Overloaded constructors", note:"Three constructors with different parameter lists; the compiler picks one by argument count and types.", tags:["constructor overloading","BankAccount"], lang:"java",
+     code:R`class BankAccount {
+    int accountNo;
+    String name;
+    double balance;
+
+    BankAccount() {
+        accountNo = 0;
+        name = "Unknown";
+        balance = 0;
+    }
+    BankAccount(int accountNo, String name) {
+        this.accountNo = accountNo;
+        this.name = name;
+        balance = 0;
+    }
+    BankAccount(int accountNo, String name, double balance) {
+        this.accountNo = accountNo;
+        this.name = name;
+        this.balance = balance;
+    }
+    void display() {
+        System.out.println("Account Number: " + accountNo);
+        System.out.println("Name: " + name);
+        System.out.println("Balance: " + balance);
+        System.out.println();
+    }
+}
+
+public class BankAccountDemo {
+    public static void main(String[] args) {
+        BankAccount b1 = new BankAccount();
+        BankAccount b2 = new BankAccount(101, "Raina");
+        BankAccount b3 = new BankAccount(102, "Rinku", 25000);
+        b1.display();
+        b2.display();
+        b3.display();
+    }
+}`,
+     log:R`Account Number: 0
+Name: Unknown
+Balance: 0.0
+
+Account Number: 101
+Name: Raina
+Balance: 0.0
+
+Account Number: 102
+Name: Rinku
+Balance: 25000.0
+` },
+   { t:"The this keyword", note:"Inside the constructor, this.name is the field and name is the parameter that shadows it.", tags:["this","shadowing"], lang:"java",
+     code:R`class Student {
+    String name;
+    int age;
+
+    Student(String name, int age) {
+        this.name = name;     // field = parameter
+        this.age = age;
+    }
+    void display() {
+        System.out.println("Name: " + this.name);
+        System.out.println("Age: " + this.age);
+    }
+}
+
+public class ThisDemo {
+    public static void main(String[] args) {
+        Student s = new Student("Raina", 19);
+        s.display();
+    }
+}`,
+     log:R`Name: Raina
+Age: 19` },
+   { t:"Constructor chaining", note:"Each shorter constructor calls the next with this(...), supplying defaults, until the full constructor runs.", tags:["this()","chaining","defaults"], lang:"java",
+     code:R`class Student {
+    String name;
+    int age;
+    String branch;
+
+    Student() {
+        this("Unknown");              // -> Student(String)
+    }
+    Student(String name) {
+        this(name, 0);                // -> Student(String, int)
+    }
+    Student(String name, int age) {
+        this(name, age, "CSE");       // -> Student(String, int, String)
+    }
+    Student(String name, int age, String branch) {
+        this.name = name;
+        this.age = age;
+        this.branch = branch;
+    }
+    void display() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Branch: " + branch);
+    }
+}
+
+public class ConstructorChaining {
+    public static void main(String[] args) {
+        Student s = new Student("Raina", 19, "CSE-AIML");
+        s.display();
+    }
+}`,
+     log:R`Name: Raina
+Age: 19
+Branch: CSE-AIML` },
+   { t:"Static variable counter", note:"count is shared by all Student objects, so each constructor call increments the same variable.", tags:["static","counter","class variable"], lang:"java",
+     code:R`class Student {
+    String name;
+    static int count = 0;      // one copy for the whole class
+
+    Student(String name) {
+        this.name = name;
+        count++;
+    }
+    void display() {
+        System.out.println("Name: " + name);
+    }
+}
+
+public class StaticVariable {
+    public static void main(String[] args) {
+        Student s1 = new Student("Raina");
+        Student s2 = new Student("Rinku");
+        Student s3 = new Student("Amar");
+        s1.display();
+        s2.display();
+        s3.display();
+        System.out.println("Total Students: " + Student.count);
+    }
+}`,
+     log:R`Name: Raina
+Name: Rinku
+Name: Amar
+Total Students: 3` }
+  ]},
+/* ---------------- 6 ---------------- */
+{ id:6, week:"Week 7", title:"String Manipulation Mechanics",
+  lede:"The String Constant Pool versus heap objects, mutable StringBuffer edits and delimiter scanning with StringTokenizer.",
+  tags:["String","StringBuffer","StringTokenizer","constant pool"],
+  concept:{ h:"Immutable, mutable, tokenized", p:["Literals such as \"Java\" are interned in the String Constant Pool, so two equal literals share one object. new String(\"Java\") always creates a separate heap object. That is why == compares references, while equals() compares content. StringBuffer is mutable and edits in place; StringTokenizer splits text on delimiters."], pts:["Use equals() for text comparison, never ==.","StringBuffer's default capacity is 16 plus the initial length (21 for \"Hello\").","The default delimiter set is whitespace; a custom string lists delimiter characters."], side:"Constructors shown", sidePts:["new String() - empty","new String(char[])","new String(byte[]) - ASCII codes","String literal vs new String(\"...\")"]},
+  topics:[
+   { t:"String constructors: pool vs heap", note:"The == results tell the story: the two literals share a pooled object, while each new String is a distinct heap object even though the text matches.", tags:["constant pool","heap","==","equals()"], lang:"java",
+     code:R`public class StringCons {
+    public static void main(String[] args) {
+        String strLiteral1 = "Java";
+        String strLiteral2 = "Java";               // same pooled object
+        String strEmpty = new String();
+        char[] charArray = {'P', 'r', 'o', 'g', 'r', 'a', 'm'};
+        String strFromChar = new String(charArray);
+        byte[] byteArray = {67, 111, 100, 101};    // ASCII for C, o, d, e
+        String strFromByte = new String(byteArray);
+        String strNewObject1 = new String("Java"); // new heap object
+        String strNewObject2 = new String("Java"); // another heap object
+
+        System.out.println("1. String Literal: " + strLiteral1);
+        System.out.println("2. Empty String via new String(): '" + strEmpty + "' (Length: " + strEmpty.length() + ")");
+        System.out.println("3. From Character Array: " + strFromChar);
+        System.out.println("4. From Byte Array: " + strFromByte);
+
+        System.out.println(strLiteral1 == strLiteral2);
+        System.out.println(strLiteral1 == strNewObject1);
+        System.out.println(strNewObject1 == strNewObject2);
+        System.out.println(strLiteral1.equals(strNewObject1));
+    }
+}`,
+     log:R`1. String Literal: Java
+2. Empty String via new String(): '' (Length: 0)
+3. From Character Array: Program
+4. From Byte Array: Code
+
+Comparing two literals (strLiteral1 == strLiteral2): true
+Comparing literal with 'new' object (strLiteral1 == strNewObject1): false
+Comparing two 'new' objects (strNewObject1 == strNewObject2): false
+Comparing values using .equals() (strLiteral1.equals(strNewObject1)): true` },
+   { t:"StringBuffer mutable actions", note:"append, insert, replace, delete and reverse all modify the same buffer. Length changes while capacity stays at 21 because it never had to grow.", tags:["append","insert","replace","delete","reverse","capacity"], lang:"java",
+     code:R`public class StrBuffer {
+    public static void main(String[] args) {
+        StringBuffer sb = new StringBuffer("Hello");
+        System.out.println("Initial String: " + sb);
+        displayStats(sb);
+
+        sb.append(" World");
+        System.out.println("\nAfter Append: " + sb);
+        displayStats(sb);
+
+        sb.insert(6, "Beautiful ");
+        System.out.println("\nAfter Insert: " + sb);
+        displayStats(sb);
+
+        sb.replace(6, 15, "Awesome");
+        System.out.println("\nAfter Replace: " + sb);
+        displayStats(sb);
+
+        sb.delete(5, 13);
+        System.out.println("\nAfter Delete: " + sb);
+        displayStats(sb);
+
+        sb.reverse();
+        System.out.println("\nAfter Reverse: " + sb);
+        displayStats(sb);
+    }
+
+    public static void displayStats(StringBuffer buffer) {
+        System.out.println("-> Length: " + buffer.length() + " | Capacity: " + buffer.capacity());
+    }
+}`,
+     log:R`Initial String: Hello
+-> Length: 5 | Capacity: 21
+
+After Append: Hello World
+-> Length: 11 | Capacity: 21
+
+After Insert: Hello Beautiful World
+-> Length: 21 | Capacity: 21
+
+After Replace: Hello Awesome World
+-> Length: 19 | Capacity: 21
+
+After Delete: Hello World
+-> Length: 11 | Capacity: 21
+
+After Reverse: dlroW olleH
+-> Length: 11 | Capacity: 21` },
+   { t:"StringTokenizer delimiter scanning", note:"With no delimiter the sentence splits on whitespace. Passing \"a\" makes every letter a an edge, so \"Java is easy to learn\" breaks at each a.", tags:["StringTokenizer","delimiter","countTokens","Scanner"], lang:"java",
+     code:R`import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class StringTokenizerDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a sentence: ");
+        String sentence = sc.nextLine();
+
+        StringTokenizer st = new StringTokenizer(sentence);   // whitespace
+        int count1 = st.countTokens();
+        System.out.println("\nTokens:");
+        while (st.hasMoreTokens()) {
+            System.out.println(st.nextToken());
+        }
+        System.out.println("Total number of tokens: " + count1);
+
+        System.out.print("\nEnter a delimiter: ");
+        String delimiter = sc.nextLine();
+        StringTokenizer st2 = new StringTokenizer(sentence, delimiter);
+        int count2 = st2.countTokens();
+        System.out.println("\nTokens using delimiter '" + delimiter + "':");
+        while (st2.hasMoreTokens()) {
+            System.out.println(st2.nextToken());
+        }
+        System.out.println("Total number of tokens: " + count2);
+        sc.close();
+    }
+}`,
+     log:R`Enter a sentence: Java is easy to learn
+
+Tokens:
+Java
+is
+easy
+to
+learn
+Total number of tokens: 5
+
+Enter a delimiter: a
+
+Tokens using delimiter 'a':
+J
+v
+is e
+sy to le
+rn
+Total number of tokens: 5` }
+  ]},
+/* ---------------- 7 ---------------- */
+{ id:7, week:"Weeks 7–8", title:"Inheritance & Runtime Polymorphism",
+  lede:"Single and multilevel extension, super for constructors and members, method overriding and dynamic method dispatch.",
+  tags:["extends","super","@Override","dynamic dispatch"],
+  concept:{ h:"Reuse by extension, behaviour by runtime type", p:["extends lets a subclass inherit fields and methods. super(...) invokes the parent constructor; super.member reaches the parent's version. When a subclass overrides a method and a parent-typed reference holds a child object, the JVM picks the implementation from the object's actual class at run time: dynamic method dispatch."], pts:["Constructors run top-down: Person, then Student, then GraduateStudent.","The compiler checks the reference type; the JVM chooses the method by object type.","@Override makes the compiler verify that you are really overriding."], side:"Patterns practised", sidePts:["Single inheritance: Person → Student","Multilevel: Person → Employee → Manager","Overriding: Animal → Dog / Cat","Dispatch: Shape and BankAccount hierarchies"]},
+  topics:[
+   { t:"Single inheritance", note:"Student inherits name and age from Person and adds its own fields.", tags:["extends","super.name"], lang:"java",
+     code:R`class Person {
+    String name = "Bhavya";
+    int age = 19;
+}
+
+class Student extends Person {
+    int rollno = 101;
+    String branch = "AIML";
+    void display() {
+        System.out.println("Name: " + super.name);
+        System.out.println("Age: " + super.age);
+        System.out.println("Roll No: " + rollno);
+        System.out.println("Branch: " + branch);
+    }
+}
+
+public class SInherit {
+    public static void main(String[] args) {
+        Student s1 = new Student();
+        s1.display();
+    }
+}`,
+     log:R`Name: Bhavya
+Age: 19
+Roll No: 101
+Branch: AIML` },
+   { t:"super constructor call", note:"super(name, age) hands the shared fields to the parent so it can initialise them.", tags:["super()","constructor"], lang:"java",
+     code:R`class Person {
+    String name;
+    int age;
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    void displayPersonDetails() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+    }
+}
+
+class Student extends Person {
+    int rollNo;
+    String branch;
+    Student(String name, int age, int rollNo, String branch) {
+        super(name, age);            // parent constructor first
+        this.rollNo = rollNo;
+        this.branch = branch;
+    }
+    void displayStudentDetails() {
+        displayPersonDetails();
+        System.out.println("Roll Number: " + rollNo);
+        System.out.println("Branch: " + branch);
+    }
+}
+
+public class BasicInheritance {
+    public static void main(String[] args) {
+        Student s = new Student("Ravi", 19, 101, "CSE-AIML");
+        s.displayStudentDetails();
+    }
+}`,
+     log:R`Name: Ravi
+Age: 19
+Roll Number: 101
+Branch: CSE-AIML` },
+   { t:"super with an overridden method", note:"The child's display() first calls the parent's version through super, then adds its own line.", tags:["super.method()","override"], lang:"java",
+     code:R`class Vehicle {
+    int speed = 150;
+    void display() {
+        System.out.println("Speed(Vehicle): " + speed);
+    }
+}
+
+class Car extends Vehicle {
+    String model = "Porsche";
+    @Override
+    void display() {
+        super.display();
+        System.out.println("Speed(" + model + "): " + super.speed);
+    }
+}
+
+public class Super {
+    public static void main(String[] args) {
+        Car c = new Car();
+        c.display();
+    }
+}`,
+     log:R`Speed(Vehicle): 150
+Speed(Porsche): 150` },
+   { t:"Multilevel inheritance", note:"Manager → Employee → Person: each constructor passes its share up the chain, and each display method calls the one above.", tags:["multilevel","super()"], lang:"java",
+     code:R`class Person {
+    String name;
+    int age;
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    public void displayP() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+    }
+}
+
+class Employee extends Person {
+    int empid;
+    double sal;
+    public Employee(String name, int age, int empid, double sal) {
+        super(name, age);
+        this.empid = empid;
+        this.sal = sal;
+    }
+    public void displayE() {
+        displayP();
+        System.out.println("Employee ID: " + empid);
+        System.out.println("Salary: " + sal);
+    }
+}
+
+class Manager extends Employee {
+    String dept;
+    public Manager(String name, int age, int empid, double sal, String dept) {
+        super(name, age, empid, sal);
+        this.dept = dept;
+    }
+    public void displayM() {
+        displayE();
+        System.out.println("Department: " + dept);
+    }
+}
+
+public class MultiInherit {
+    public static void main(String[] args) {
+        Manager m = new Manager("Ravi", 27, 102, 50000, "Tech");
+        m.displayM();
+    }
+}`,
+     log:R`Name: Ravi
+Age: 27
+Employee ID: 102
+Salary: 50000.0
+Department: Tech` },
+   { t:"Constructor execution order", note:"With implicit super() calls, construction runs from the topmost ancestor downward.", tags:["constructor order","implicit super()"], lang:"java",
+     code:R`class Person {
+    Person() {
+        System.out.println("Person constructor executed");
+    }
+}
+class Student extends Person {
+    Student() {
+        System.out.println("Student constructor executed");
+    }
+}
+class GraduateStudent extends Student {
+    GraduateStudent() {
+        System.out.println("GraduateStudent constructor executed");
+    }
+}
+
+public class MultiInheritCons {
+    public static void main(String[] args) {
+        GraduateStudent gs = new GraduateStudent();
+    }
+}`,
+     log:R`Person constructor executed
+Student constructor executed
+GraduateStudent constructor executed` },
+   { t:"Method overriding", note:"Dog and Cat replace Animal.sound(). The variables are typed Animal, but the call runs the child's code.", tags:["@Override","upcasting"], lang:"java",
+     code:R`class Animal {
+    void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+class Cat extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Cat meows");
+    }
+}
+
+public class MethodOverride {
+    public static void main(String[] args) {
+        Animal a1 = new Dog();
+        Animal a2 = new Cat();
+        a1.sound();
+        a2.sound();
+    }
+}`,
+     log:R`Dog barks
+Cat meows` },
+   { t:"Dynamic method dispatch: shapes", note:"One Shape reference is re-pointed at three different objects; the same draw() call resolves differently each time.", tags:["dynamic dispatch","polymorphism"], lang:"java",
+     code:R`class Shape {
+    void draw() { System.out.println("Drawing a shape"); }
+}
+class Circle extends Shape {
+    @Override
+    void draw() { System.out.println("Drawing a Circle"); }
+}
+class Rectangle extends Shape {
+    @Override
+    void draw() { System.out.println("Drawing a Rectangle"); }
+}
+class Triangle extends Shape {
+    @Override
+    void draw() { System.out.println("Drawing a Triangle"); }
+}
+
+public class Dynamic {
+    public static void main(String[] args) {
+        Shape shape;
+        shape = new Circle();
+        shape.draw();
+        shape = new Rectangle();
+        shape.draw();
+        shape = new Triangle();
+        shape.draw();
+    }
+}`,
+     log:R`Drawing a Circle
+Drawing a Rectangle
+Drawing a Triangle` },
+   { t:"Dynamic dispatch: bank accounts", note:"Savings and current accounts override calculateInterest(); a BankAccount variable dispatches to whichever object it holds.", tags:["dynamic dispatch","BankAccount"], lang:"java",
+     code:R`class BankAccount {
+    void calculateInterest() {
+        System.out.println("Calculating bank account interest");
+    }
+}
+class SavingsAccount extends BankAccount {
+    @Override
+    void calculateInterest() {
+        System.out.println("Savings Account Interest: 5%");
+    }
+}
+class CurrentAccount extends BankAccount {
+    @Override
+    void calculateInterest() {
+        System.out.println("Current Account Interest: 3%");
+    }
+}
+
+public class DynamicBankAcc {
+    public static void main(String[] args) {
+        BankAccount account;
+        account = new SavingsAccount();
+        account.calculateInterest();
+        account = new CurrentAccount();
+        account.calculateInterest();
+    }
+}`,
+     log:R`Savings Account Interest: 5%
+Current Account Interest: 3%` }
+  ]},
+/* ---------------- 8 ---------------- */
+{ id:8, week:"Week 10", title:"Defensive Exception Engineering",
+  lede:"try / catch with granular handlers, explicit throw and throws, finally clean-up and custom validation exceptions.",
+  tags:["try-catch","throw","throws","finally","custom exception"],
+  concept:{ h:"Handle what you can, declare what you cannot", p:["An exception is an object describing a runtime failure. try wraps risky code, catch handles a specific type, and finally runs whether or not anything went wrong. throw raises an exception explicitly; throws in a method signature declares that a checked exception may escape. Subclassing Exception gives domain-specific validation errors."], pts:["Order catch blocks from most specific to most general.","Checked exceptions (IOException, custom Exception subclasses) must be caught or declared.","An uncaught exception terminates the thread and prints a stack trace."], side:"Types exercised", sidePts:["ArithmeticException, ArrayIndexOutOfBoundsException, NullPointerException","IllegalArgumentException (unchecked, via throw)","IOException (checked, via throws)","InvalidAgeException, InvalidMarksException, OutOfRangeEx"]},
+  topics:[
+   { t:"Catching a division by zero", note:"The catch block absorbs the error, so the line after the try block still executes.", tags:["ArithmeticException","try","catch"], lang:"java",
+     code:R`public class ZeroDivError {
+    public static void main(String[] args) {
+        try {
+            int c = 10 / 0;
+            System.out.println("Result:" + c);
+        }
+        catch (ArithmeticException e) {
+            System.out.println("Error: Division by zero");
+        }
+        System.out.println("Code executed");
+    }
+}`,
+     log:R`Error: Division by zero
+Code executed` },
+   { t:"Three built-in exception types", note:"Separate try blocks show each failure's own message from the JVM.", tags:["ArrayIndexOutOfBoundsException","NullPointerException","getMessage()"], lang:"java",
+     code:R`public class Exceptiontypes {
+    public static void main(String[] args) {
+        try {
+            int a = 5 / 0;
+        } catch (ArithmeticException e) {
+            System.out.println("Caught ArithmeticException: " + e.getMessage());
+        }
+        try {
+            int[] arr = new int[3];
+            int val = arr[5];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Caught ArrayIndexOutOfBoundsException: " + e.getMessage());
+        }
+        try {
+            String str = null;
+            int length = str.length();
+        } catch (NullPointerException e) {
+            System.out.println("Caught NullPointerException: " + e.getMessage());
+        }
+    }
+}`,
+     log:R`Caught ArithmeticException: / by zero
+Caught ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 3
+Caught NullPointerException: Cannot invoke "String.length()" because "<local1>" is null` },
+   { t:"Uncaught exception and stack trace", note:"With no handler, the exception propagates out of main; the program stops and the second println never runs.", tags:["stack trace","uncaught"], lang:"java",
+     code:R`public class UncaughtExceptionDemo {
+    public static void main(String[] args) {
+        int num = 50 / 0;   // uncaught: terminates program, prints stack trace
+        System.out.println("This line will not execute.");
+    }
+}`,
+     log:R`Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at Main.main(Main.java:6)` },
+   { t:"Granular multiple catch blocks", note:"The NullPointerException fires first, so only its handler runs; the division is never reached. Exception comes last as the catch-all.", tags:["multiple catch","specific to general"], lang:"java",
+     code:R`public class MultipleCatch {
+    public static void main(String[] args) {
+        try {
+            String s = null;
+            System.out.println(s.length());  // triggers NullPointerException
+            int x = 10 / 0;                  // never reached
+        } catch (ArithmeticException e) {
+            System.out.println("Arithmetic exception handled.");
+        } catch (NullPointerException e) {
+            System.out.println("Null pointer exception handled.");
+        } catch (Exception e) {
+            System.out.println("General exception handled.");
+        }
+    }
+}`,
+     log:R`Null pointer exception handled.` },
+   { t:"throw: explicit exception", note:"Application logic raises its own exception when a business rule is violated.", tags:["throw","IllegalArgumentException"], lang:"java",
+     code:R`public class Throw {
+    public static void checkAge(int age) {
+        if (age < 18) {
+            throw new IllegalArgumentException("Age must be 18 or older.");
+        } else {
+            System.out.println("Access granted.");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            checkAge(15);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Caught explicit exception: " + e.getMessage());
+        }
+    }
+}`,
+     log:R`Caught explicit exception: Age must be 18 or older.` },
+   { t:"throws: declared propagation", note:"validateFile() does not handle the IOException; it declares it, so the caller must catch it.", tags:["throws","IOException","checked"], lang:"java",
+     code:R`import java.io.IOException;
+
+public class Throws {
+    static void validateFile() throws IOException {
+        throw new IOException("Device error/File error.");
+    }
+
+    public static void main(String[] args) {
+        try {
+            validateFile();
+        } catch (IOException e) {
+            System.out.println("Caught propagated exception: " + e.getMessage());
+        }
+    }
+}`,
+     log:R`Caught propagated exception: Device error/File error.` },
+   { t:"finally state", note:"The finally block executes on the success path too.", tags:["finally","clean-up"], lang:"java",
+     code:R`public class Finally {
+    public static void main(String[] args) {
+        try {
+            int data = 25 / 5;
+            System.out.println(data);
+        } catch (ArithmeticException e) {
+            System.out.println(e);
+        } finally {
+            System.out.println("Finally block is always executed.");
+        }
+    }
+}`,
+     log:R`5
+Finally block is always executed.` },
+   { t:"Custom exception: InvalidAgeException", note:"Extending Exception and calling super(message) creates a checked, domain-specific type.", tags:["user-defined","extends Exception"], lang:"java",
+     code:R`class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+public class UserDefinedException {
+    public static void main(String[] args) {
+        int age = 12;
+        try {
+            if (age < 18) {
+                throw new InvalidAgeException("Not eligible to vote.");
+            }
+        } catch (InvalidAgeException e) {
+            System.out.println("Custom Exception: " + e.getMessage());
+        }
+    }
+}`,
+     log:R`Custom Exception: Not eligible to vote.` },
+   { t:"Validation with throws: marks range", note:"A reusable validator throws the custom exception for out-of-range input; main handles it.", tags:["validation","custom exception","throws"], lang:"java",
+     code:R`class InvalidMarksException extends Exception {
+    public InvalidMarksException(String msg) {
+        super(msg);
+    }
+}
+
+public class MarksValidation {
+    public static void validateMarks(int marks) throws InvalidMarksException {
+        if (marks < 0 || marks > 100) {
+            throw new InvalidMarksException("Marks must be between 0 and 100.");
+        }
+        System.out.println("Marks are valid: " + marks);
+    }
+
+    public static void main(String[] args) {
+        try {
+            validateMarks(105);
+        } catch (InvalidMarksException e) {
+            System.out.println("Validation Error: " + e.getMessage());
+        }
+    }
+}`,
+     log:R`Validation Error: Marks must be between 0 and 100.` },
+   { t:"Everything together", note:"Custom exception, specific catch order and finally combined in one flow.", tags:["catch","finally","custom exception"], lang:"java",
+     code:R`class OutOfRangeEx extends Exception {
+    OutOfRangeEx(String s) { super(s); }
+}
+
+public class AllExceptions {
+    static void checkValue(int val) throws OutOfRangeEx {
+        if (val > 50) {
+            throw new OutOfRangeEx("Value exceeds limit 50.");
+        }
+        System.out.println("Valid value.");
+    }
+
+    public static void main(String[] args) {
+        try {
+            int num = 10;
+            int res = num / 2;
+            checkValue(60);        // triggers custom exception
+        } catch (ArithmeticException e) {
+            System.out.println("Arithmetic caught.");
+        } catch (OutOfRangeEx e) {
+            System.out.println("Custom caught: " + e.getMessage());
+        } finally {
+            System.out.println("Finally block executed cleanly.");
+        }
+    }
+}`,
+     log:R`Custom caught: Value exceeds limit 50.
+Finally block executed cleanly.` }
+  ]},
+/* ---------------- 9 ---------------- */
+{ id:9, week:"Weeks 10–11", title:"Stream Processing & Multithreading",
+  lede:"8-bit byte streams versus 16-bit character streams, then threads built two ways, sleep timeouts and join() synchronization.",
+  tags:["byte streams","character streams","Thread","Runnable","join()"],
+  concept:{ h:"Moving data and running work concurrently", p:["Byte streams (InputStream/OutputStream) move raw 8-bit data, whereas character streams (Reader/Writer) translate 16-bit Unicode text. Threads let a program do several things at once: create one by extending Thread or by supplying a Runnable, pause it with Thread.sleep(ms), and make another thread wait for it with join()."], pts:["try-with-resources closes streams automatically; the older style closes them in finally.","start() creates a new thread; calling run() directly would not.","join() blocks the caller until the target thread finishes; isAlive() reports its state."], side:"Environment notes", sidePts:["File errors in the logs are genuine: the sample files did not exist on the test machine.","Interleaved thread output may differ between runs."]},
+  topics:[
+   { t:"Byte streams vs character streams", note:"Choose by the data: bytes for binary, characters for text.", tags:["InputStream","Reader","8-bit","16-bit"], lang:"java", extraHTML:streamTableHTML, onlyExtra:true, search:"byte stream character stream 8-bit 16-bit unicode inputstream outputstream reader writer" },
+   { t:"Byte stream in memory", note:"ByteArrayInputStream feeds bytes to ByteArrayOutputStream one value at a time until read() returns -1.", tags:["ByteArrayInputStream","ByteArrayOutputStream","read()"], lang:"java",
+     code:R`import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+public class ByteStream {
+    public static void main(String[] args) throws IOException {
+        byte[] data = {65, 66, 67, 68};   // ASCII for A, B, C, D
+        ByteArrayInputStream input = new ByteArrayInputStream(data);
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        int val;
+        while ((val = input.read()) != -1) {
+            output.write(val);
+        }
+        System.out.println("Output bytes as string: " + output.toString());
+    }
+}`,
+     log:R`Output bytes as string: ABCD` },
+   { t:"Copying a file byte by byte", note:"try-with-resources opens both streams and closes them automatically. The recorded run failed because source.txt did not exist.", tags:["FileInputStream","FileOutputStream","try-with-resources"], lang:"java",
+     code:R`import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class CopyFileBytes {
+    public static void main(String[] args) {
+        try (FileInputStream fis = new FileInputStream("source.txt");
+             FileOutputStream fos = new FileOutputStream("destination.txt")) {
+            int temp;
+            while ((temp = fis.read()) != -1) {
+                fos.write(temp);
+            }
+            System.out.println("File copied successfully.");
+        } catch (IOException e) {
+            System.out.println("I/O Error: " + e.getMessage());
+        }
+    }
+}`,
+     log:R`I/O Error: source.txt (No such file or directory)` },
+   { t:"Binary copy with buffer and finally", note:"A 1024-byte buffer speeds up copying; granular catches separate a missing file from other I/O errors, and finally closes both streams.", tags:["buffer","FileNotFoundException","finally"], lang:"java",
+     code:R`import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class CopyImageBytes {
+    public static void main(String[] args) {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            fis = new FileInputStream("source_image.jpg");
+            fos = new FileOutputStream("destination_image.jpg");
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                fos.write(buffer, 0, length);
+            }
+            System.out.println("Image copied successfully using try-catch-finally.");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("I/O exception occurred: " + e.getMessage());
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (fos != null) fos.close();
+            } catch (IOException e) {
+                System.out.println("Error closing streams: " + e.getMessage());
+            }
+        }
+    }
+}`,
+     log:R`File not found: source_image.jpg (No such file or directory)` },
+   { t:"Character stream: keyboard to console", note:"InputStreamReader turns System.in bytes into characters; PrintWriter echoes them. Ctrl+Z (Windows) ends input.", tags:["InputStreamReader","PrintWriter","flush()"], lang:"java",
+     code:R`import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.io.IOException;
+
+public class KeyboardToConsole {
+    public static void main(String[] args) {
+        System.out.println("Enter text (Press Ctrl+D or Ctrl+Z to stop):");
+        try (Reader reader = new InputStreamReader(System.in);
+             Writer writer = new PrintWriter(System.out)) {
+            int character;
+            while ((character = reader.read()) != -1) {
+                writer.write(character);
+                writer.flush();
+            }
+        } catch (IOException e) {
+            System.err.println("An I/O error occurred: " + e.getMessage());
+        }
+    }
+}`,
+     log:R`C:\25EU02121>javac KeyboardToConsole.java
+
+C:\25EU02121>java KeyboardToConsole
+Enter text (Press Ctrl+D or Ctrl+Z to stop):
+Java
+Java
+Programming
+Programming
+^Z` },
+   { t:"Character counting with FileReader", note:"A small state machine (inWord) counts words as transitions from whitespace to non-whitespace. The input file held two lines: \"Hello Java\" and \"Streams Rule\".", tags:["FileReader","Character.isWhitespace","word count"], lang:"java",
+     code:R`import java.io.FileReader;
+import java.io.IOException;
+
+public class FileCounterDemo {
+    public static void main(String[] args) {
+        int charCount = 0, wordCount = 0, lineCount = 0;
+        boolean inWord = false;
+
+        try (FileReader reader = new FileReader("input.txt")) {
+            int character;
+            while ((character = reader.read()) != -1) {
+                charCount++;
+                char ch = (char) character;
+                if (ch == '\n') {
+                    lineCount++;
+                }
+                if (Character.isWhitespace(ch)) {
+                    inWord = false;
+                } else if (!inWord) {
+                    wordCount++;
+                    inWord = true;
+                }
+            }
+            if (charCount > 0 && lineCount == 0) {
+                lineCount = 1;
+            }
+            System.out.println("Characters: " + charCount);
+            System.out.println("Words: " + wordCount);
+            System.out.println("Lines: " + lineCount);
+        } catch (IOException e) {
+            System.err.println("Error analyzing file: " + e.getMessage());
+        }
+    }
+}`,
+     log:R`C:\25EU02121>javac FileCounterDemo.java
+
+C:\25EU02121>java FileCounterDemo
+Characters: 23
+Words: 4
+Lines: 2` },
+   { t:"Main thread inspection", note:"Every program starts in a thread named main with default priority 5.", tags:["Thread.currentThread()","priority","state"], lang:"java",
+     code:R`public class MainThreadDemo {
+    public static void main(String[] args) {
+        Thread mainThread = Thread.currentThread();
+        System.out.println("Main Thread Information:");
+        System.out.println("Name: " + mainThread.getName());
+        System.out.println("Priority (1-10): " + mainThread.getPriority());
+        System.out.println("State: " + mainThread.getState());
+    }
+}`,
+     log:R`C:\25EU02121>javac MainThreadDemo.java
+
+C:\25EU02121>java MainThreadDemo
+Main Thread Information:
+Name: main
+Priority (1-10): 5
+State: RUNNABLE` },
+   { t:"Thread class extension vs Runnable interface", note:"Two ways to define the work. Extending Thread burns the single superclass; a Runnable keeps the class free to extend something else.", tags:["extends Thread","implements Runnable","start()"], lang:"java", extraHTML:threadTableHTML,
+     code:R`// --- Variant A: extend Thread ---
+class CustomThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println(getName() + " is running (Extended from Thread class).");
+    }
+}
+public class ThreadExtensionDemo {
+    public static void main(String[] args) {
+        CustomThread thread = new CustomThread();
+        thread.setName("WorkerThread-1");
+        thread.start();
+    }
+}
+
+// --- Variant B: implement Runnable ---
+class CustomRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName() + " is running (Implemented via Runnable).");
+    }
+}
+public class RunnableThreadDemo {
+    public static void main(String[] args) {
+        CustomRunnable runnable = new CustomRunnable();
+        Thread thread = new Thread(runnable, "WorkerThread-2");
+        thread.start();
+    }
+}`,
+     log:R`C:\25EU02121>java ThreadExtensionDemo
+WorkerThread-1 is running (Extended from Thread class).
+
+C:\25EU02121>java RunnableThreadDemo
+WorkerThread-2 is running (Implemented via Runnable).` },
+   { t:"Concurrent execution with sleep timeouts", note:"Three threads share one Runnable. Thread.sleep(100) pauses each for 100 ms between items, so their output interleaves.", tags:["Thread.sleep","InterruptedException","concurrency"], lang:"java",
+     code:R`class InterleavedTask implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 1; i <= 3; i++) {
+            System.out.println(Thread.currentThread().getName() + " processing item: " + i);
+            try {
+                Thread.sleep(100);              // timeout: 100 ms
+            } catch (InterruptedException e) {
+                System.out.println("Thread execution interrupted");
+            }
+        }
+    }
+}
+
+public class ConcurrentExecution {
+    public static void main(String[] args) {
+        Thread t1 = new Thread(new InterleavedTask(), "Thread-A");
+        Thread t2 = new Thread(new InterleavedTask(), "Thread-B");
+        Thread t3 = new Thread(new InterleavedTask(), "Thread-C");
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}`,
+     log:R`C:\25EU02121>java ConcurrentExecution
+Thread-A processing item: 1
+Thread-B processing item: 1
+Thread-C processing item: 1
+Thread-A processing item: 2
+Thread-C processing item: 2
+Thread-B processing item: 2
+Thread-A processing item: 3
+Thread-B processing item: 3
+Thread-C processing item: 3` },
+   { t:"isAlive() and join() lifecycle", note:"A thread is not alive before start(), is alive while running, and is dead once join() returns.", tags:["isAlive()","join()","lifecycle"], lang:"java",
+     code:R`public class IsAliveDemo {
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread = new Thread(() -> {
+            try { Thread.sleep(300); } catch (InterruptedException ignored) {}
+        });
+        System.out.println("Before start() - Is thread alive? " + thread.isAlive());
+
+        thread.start();
+        System.out.println("After start() - Is thread alive? " + thread.isAlive());
+
+        thread.join();                       // wait for completion
+        System.out.println("After completion - Is thread alive? " + thread.isAlive());
+    }
+}`,
+     log:R`C:\25EU02121>java IsAliveDemo
+Before start() - Is thread alive? false
+After start() - Is thread alive? true
+After completion - Is thread alive? false` },
+   { t:"join() synchronization hook", note:"Main announces it is waiting, then blocks on join(); it resumes only after the dependent thread has finished.", tags:["join()","synchronization","wait for thread"], lang:"java",
+     code:R`public class JoinMethod {
+    public static void main(String[] args) {
+        Thread dependentThread = new Thread(() -> {
+            System.out.println("Dependent thread starting heavy computations...");
+            try {
+                Thread.sleep(1000);
+                System.out.println("Dependent thread work finished.");
+            } catch (InterruptedException e) {
+                System.err.println(e.getMessage());
+            }
+        });
+
+        dependentThread.start();
+        System.out.println("Main thread waiting for dependent thread to conclude via join()...");
+        try {
+            dependentThread.join();
+        } catch (InterruptedException e) {
+            System.err.println(e.getMessage());
+        }
+        System.out.println("Main thread execution resumes and wraps up.");
+    }
+}`,
+     log:R`C:\25EU02121>java JoinMethod
+Main thread waiting for dependent thread to conclude via join()...
+Dependent thread starting heavy computations...
+Dependent thread work finished.
+Main thread execution resumes and wraps up.` },
+   { t:"Controlled sequential stages", note:"join() after each start() forces Stage-1, Stage-2 and Stage-3 to run strictly one after another.", tags:["join()","sequencing","Runnable lambda"], lang:"java",
+     code:R`public class ControlledExecution {
+    public static void main(String[] args) throws InterruptedException {
+        Runnable task = () -> {
+            System.out.println(Thread.currentThread().getName() + " has begun.");
+            try { Thread.sleep(400); } catch (InterruptedException ignored) {}
+            System.out.println(Thread.currentThread().getName() + " has completed.");
+        };
+
+        Thread t1 = new Thread(task, "Stage-1");
+        Thread t2 = new Thread(task, "Stage-2");
+        Thread t3 = new Thread(task, "Stage-3");
+
+        t1.start();
+        System.out.println("Checking Stage-1 running status: " + t1.isAlive());
+        t1.join();
+
+        t2.start();
+        t2.join();
+
+        t3.start();
+        t3.join();
+        System.out.println("All controlled sequencing stages have completed successfully.");
+    }
+}`,
+     log:R`C:\25EU02121>java ControlledExecution
+Checking Stage-1 running status: true
+Stage-1 has begun.
+Stage-1 has completed.
+Stage-2 has begun.
+Stage-2 has completed.
+Stage-3 has begun.
+Stage-3 has completed.
+All controlled sequencing stages have completed successfully.` }
+  ]}
+];
+
+/* ================= HIGHLIGHTER ================= */
+const KW = new Set(("abstract assert boolean break byte case catch char class const continue default do double else enum extends final finally float for goto if implements import instanceof int interface long native new package private protected public return short static strictfp super switch synchronized this throw throws transient try void volatile while true false null var").split(" "));
+function highlightJava(src){
+  const re=/(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*')|([A-Za-z_$][\w$]*)|(\d[\w.]*)/g;
+  let out="",last=0,m;
+  while((m=re.exec(src))){
+    out+=esc(src.slice(last,m.index));
+    if(m[1]) out+=`<span class="c">${esc(m[1])}</span>`;
+    else if(m[2]) out+=`<span class="s">${esc(m[2])}</span>`;
+    else if(m[3]){
+      const w=m[3];
+      if(KW.has(w)) out+=`<span class="k">${w}</span>`;
+      else if(/^[a-z_$]/.test(w)) out+=`<span class="v">${w}</span>`;
+      else out+=esc(w);
+    } else out+=esc(m[4]);
+    last=re.lastIndex;
+  }
+  return out+esc(src.slice(last));
+}
+function highlightCmd(src){
+  return src.split("\n").map(l=>/^\s*::/.test(l)?`<span class="c">${esc(l)}</span>`:esc(l)).join("\n");
+}
+function renderLog(src){
+  return src.split("\n").map(l=>{
+    let m=l.match(/^(C:\\[^>]*>)(.*)$/);
+    if(m) return `<span class="p">${esc(m[1])}</span>${esc(m[2])}`;
+    if(/^::/.test(l)) return `<span class="c">${esc(l)}</span>`;
+    if(/error:|^Exception in thread|^\d+ errors$/.test(l)) return `<span class="err">${esc(l)}</span>`;
+    return esc(l);
+  }).join("\n");
+}
+
+/* ================= STATE & RENDER ================= */
+const $=s=>document.querySelector(s);
+const timeline=$("#timeline"), main=$("#main"), q=$("#q"), box=$("#searchBox");
+let current=1, query="";
+
+function topicText(m,t){
+  return (m.title+" "+m.week+" "+t.t+" "+(t.note||"")+" "+(t.tags||[]).join(" ")+" "+(t.code||"")+" "+(t.log||"")+" "+(t.search||"")).toLowerCase();
+}
+function moduleText(m){
+  return (m.title+" "+m.week+" "+m.lede+" "+m.tags.join(" ")+" "+m.concept.h+" "+m.concept.p.join(" ")+" "+m.concept.pts.join(" ")).toLowerCase();
+}
+function matchInfo(m){
+  if(!query) return {mod:true,topics:m.topics,count:m.topics.length,all:true};
+  const words=query.toLowerCase().split(/\s+/).filter(Boolean);
+  const hit=txt=>words.every(w=>txt.includes(w));
+  const modHit=hit(moduleText(m));
+  const topics=m.topics.filter(t=>hit(topicText(m,t)));
+  if(modHit) return {mod:true,topics:m.topics,count:m.topics.length,all:true};
+  return {mod:topics.length>0,topics,count:topics.length,all:false};
+}
+
+function buildTimeline(){
+  timeline.innerHTML=MODULES.map(m=>`<li data-id="${m.id}"><button type="button"><span class="t-top">Module ${m.id} · ${m.week}<span class="badge" hidden></span></span><span class="t-title">${esc(m.title)}</span></button></li>`).join("");
+  timeline.addEventListener("click",e=>{const li=e.target.closest("li");if(li) go(+li.dataset.id)});
+}
+function updateTimeline(){
+  timeline.querySelectorAll("li").forEach(li=>{
+    const m=MODULES[li.dataset.id-1], info=matchInfo(m);
+    li.classList.toggle("hidden",!info.mod);
+    li.classList.toggle("active",m.id===current);
+    const b=li.querySelector(".badge");
+    b.hidden=!query||!info.mod; b.textContent=info.count;
+    const btn=li.querySelector("button");
+    if(m.id===current) btn.setAttribute("aria-current","true"); else btn.removeAttribute("aria-current");
+  });
+}
+
+function topicHTML(t){
+  let h=`<section class="topic"><h3>${esc(t.t)}</h3>`;
+  if(t.note) h+=`<p class="note">${esc(t.note)}</p>`;
+  if(t.tags&&t.tags.length) h+=`<div class="mini-tags">${t.tags.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>`;
+  if(t.code){
+    const lang=t.lang==="cmd"?"Command line":"Java";
+    const body=t.lang==="cmd"?highlightCmd(t.code):highlightJava(t.code);
+    h+=`<div class="codecard"><div class="bar"><span>${lang}</span><button class="copy" type="button" data-copy>Copy</button></div><pre><code>${body}</code></pre></div>`;
+  }
+  if(t.log){
+    h+=`<div class="termcard"><div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>Terminal log</span></div><pre><code>${renderLog(t.log)}</code></pre></div>`;
+    if(t.caption) h+=`<p class="note" style="margin:8px 0 0 28px;font-size:13px;color:var(--slate)">${esc(t.caption)}</p>`;
+  }
+  if(t.extraHTML) h+=t.extraHTML();
+  return h+"</section>";
+}
+
+function render(){
+  const m=MODULES[current-1], info=matchInfo(m);
+  if(!info.mod){ // current module hidden by filter -> jump to first match
+    const first=MODULES.find(x=>matchInfo(x).mod);
+    if(first){current=first.id;return render()}
+    updateTimeline();
+    main.innerHTML=`<div class="empty"><b>No lab topics match “${esc(query)}”.</b>Try a keyword such as <i>constructor</i>, <i>catch</i> or <i>JAVA_HOME</i>.<br><button class="btn" type="button" id="clr">Clear filter</button></div>`;
+    $("#clr").onclick=()=>{q.value="";setQuery("")};
+    return;
+  }
+  updateTimeline();
+  const c=m.concept;
+  const prev=MODULES[current-2], next=MODULES[current];
+  main.innerHTML=`
+  <header class="hero">
+    <div class="bignum" aria-hidden="true">${String(m.id).padStart(2,"0")}</div>
+    <div><div class="wk">Module ${m.id} of 9 · ${esc(m.week)}</div><h1>${esc(m.title)}</h1></div>
+    <p class="lede">${esc(m.lede)}</p>
+    <div class="tags">${m.tags.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
+  </header>
+  <article class="concept" aria-label="Theoretical concept">
+    <div class="c-main"><p class="label">Theoretical concept</p><h3>${esc(c.h)}</h3>${c.p.map(p=>`<p>${esc(p)}</p>`).join("")}<ul>${c.pts.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>
+    <aside class="c-side"><p class="label">${esc(c.side)}</p><ul>${c.sidePts.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></aside>
+  </article>
+  ${query&&!info.all?`<p class="label">${info.count} matching topic${info.count===1?"":"s"} for “${esc(query)}”</p>`:""}
+  ${info.topics.map(topicHTML).join("")}
+  <nav class="pager" aria-label="Module navigation">
+    <button class="btn" type="button" data-go="${prev?prev.id:""}" ${prev?"":"disabled"}>← ${prev?"Module "+prev.id:""}</button>
+    <button class="btn" type="button" data-go="${next?next.id:""}" ${next?"":"disabled"}>${next?"Module "+next.id:""} →</button>
+  </nav>`;
+}
+
+function go(id,push=true){
+  current=id;
+  if(push){try{history.replaceState(null,"","#module-"+id)}catch(e){}}
+  render();
+  if(innerWidth<=900){   // phones/tablets: land on the new module, just under the pinned strip
+    const rail=document.querySelector(".rail");
+    window.scrollTo({top:Math.max(0,main.getBoundingClientRect().top+scrollY-rail.offsetHeight),behavior:"auto"});
+  } else window.scrollTo({top:0,behavior:"auto"});
+  const li=timeline.querySelector(`li[data-id="${id}"]`);
+  if(li) li.scrollIntoView({block:"nearest",inline:"center"});
+}
+function setQuery(v){
+  query=v.trim();
+  box.classList.toggle("has-text",!!query);
+  render();
+}
+
+main.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]");
+  if(g&&g.dataset.go){go(+g.dataset.go);return}
+  const c=e.target.closest("[data-copy]");
+  if(c){
+    const txt=c.closest(".codecard").querySelector("pre").innerText;
+    const done=()=>{c.textContent="Copied";setTimeout(()=>c.textContent="Copy",1400)};
+    try{navigator.clipboard.writeText(txt).then(done,()=>{c.textContent="Press Ctrl+C"})}catch(err){c.textContent="Press Ctrl+C"}
+  }
+});
+q.addEventListener("input",()=>setQuery(q.value));
+document.addEventListener("keydown",e=>{
+  if(e.key==="/"&&document.activeElement!==q&&!/input|textarea/i.test(document.activeElement.tagName)){e.preventDefault();q.focus()}
+  else if(e.key==="Escape"&&document.activeElement===q){q.value="";setQuery("");q.blur()}
+});
+window.addEventListener("hashchange",()=>{const m=location.hash.match(/module-(\d)/);if(m&&MODULES[m[1]-1]){go(+m[1],false)}});
+
+buildTimeline();
+const h0=location.hash.match(/module-(\d)/);
+if(h0&&MODULES[h0[1]-1]) current=+h0[1];
+render();
+</script>
+</body>
+</html>
