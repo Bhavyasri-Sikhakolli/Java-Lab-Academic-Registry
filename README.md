@@ -2,15 +2,18 @@
 > A comprehensive, interactive engineering repository documenting Object-Oriented Programming (OOP) paradigms, environment configurations, and concurrent execution streams.
 
 ## 🎓 Academic Credentials
-*   **Course:** Object-Oriented Programming through Java Lab
+*   **Course:** OOP through Java
+*   **Course Code:** 24CS202
 *   **Institution:** Siddhartha Academy of Higher Education
-*   **Guided By:** Prof. Dr. M. Ramesh
-*   **Submitted By:** S. Bhavyasri (Roll No: 25EU02121)
+*   **Instructor:** Dr. M. Ramesh
+*   **Submitted By:** Sikhakolli Bhavyasri (Roll No: 25EU02121)
+*   **Department / Branch / Section:** AI / AI&ML / B
+*   **Live Site:** https://bhavyasri-sikhakolli.github.io/Java-Lab-Academic-Registry/
 
 ---
 
 ## 🏛️ Project Overview
-This repository serves as an official academic registry compiling a structured, 9-module curriculum completed within the university Laboratory Management System (LMS). It transitions from foundational compiler runtime setup, through core memory architectures, and into defensive engineering configurations and high-throughput multi-threaded pipelines.
+This repository serves as an official academic registry compiling a structured, 10-module curriculum completed within the university Laboratory Management System (LMS). It transitions from foundational compiler runtime setup, through core memory architectures, and into defensive engineering configurations, multi-threaded pipelines and lambda-based functional code.
 
 The portfolio features an interactive, clean **Editorial Layout** designed on a **Cool Frost White** backdrop, utilizing an asymmetric workspace with smooth, non-reloading tab switches to display theory models, syntax-highlighted source code, and active console outputs.
 
@@ -27,7 +30,7 @@ To ensure readability and professional presentation, the portal implements a str
 
 ## 📂 Registry Curriculum Structure
 
-The repository consolidates your submission history into 9 distinct architectural modules:
+The repository consolidates the lab submission history (Weeks 1–3 and 6–12) into 10 distinct architectural modules:
 
 ### 🧩 Core Fundamentals & Tooling
 *   **Module 1: Cross-Platform Language Metrics**
@@ -52,6 +55,8 @@ The repository consolidates your submission history into 9 distinct architectura
     *   *Focus:* Layered multi-catch blocks, explicit checking via `throw` and method `throws` propagation signatures, deterministic `finally` state execution, and custom user-defined validation types.
 *   **Module 9: Stream Processing & Multithreading**
     *   *Focus:* 8-bit Byte Streams vs 16-bit Unicode Character Streams, `Thread` extensions vs `Runnable` tasks, execution pacing (`sleep`), and thread synchronization using `join()`.
+*   **Module 10: Thread Priority, Synchronization & Lambdas**
+    *   *Focus:* Thread priorities (`MIN`/`NORM`/`MAX`), `synchronized` methods and blocks, race conditions vs thread-safe counters, a ticket-booking simulation, and lambda expressions with functional interfaces (generics, block bodies, `forEach`/`filter`, sorting, lambda-based threads).
 
 ---
 
@@ -63,7 +68,7 @@ All source code files included in this registry compile natively under **Java 21
 public class JavaAcademicRegistry {
     public static void main(String[] args) {
         // Variables and methods match Slate Steel Blue formatting
-        int activeModuleCount = 9; 
+        int activeModuleCount = 10; 
         System.out.println("Registry deployed successfully with " + activeModuleCount + " modules.");
     }
 }
