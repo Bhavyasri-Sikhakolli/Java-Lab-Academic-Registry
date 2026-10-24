@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0B1F44">
 <title>Java Lab Portfolio · Sikhakolli Bhavyasri</title>
-<meta name="description" content="A 9-module Java academic lab portfolio: language metrics, JDK setup, types, classes, strings, inheritance, exceptions, streams and threads.">
+<meta name="description" content="A 10-module Java academic lab portfolio (OOP through Java, 24CS202): language metrics, JDK setup, types, classes, strings, inheritance, exceptions, streams, threads and lambdas.">
 <style>
 :root{
   --frost:#F4F8FB;        /* Cool Frost White – canvas */
@@ -44,12 +44,14 @@ a:hover{color:var(--navy);text-decoration-color:var(--lav)}
 
 /* ---------- student profile strip ---------- */
 .profile{max-width:1320px;margin:0 auto;padding:14px 28px 0;display:flex;align-items:center;gap:10px 28px;flex-wrap:wrap}
-.p-name{display:flex;flex-direction:column;line-height:1.2;padding-right:24px;border-right:2px solid var(--line)}
+.p-name{display:flex;flex-direction:column;line-height:1.2;padding-right:24px}
 .p-lab,.profile dt{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);font-weight:700}
 .p-name b{color:var(--navy);font-size:18px}
 .profile dl{display:flex;flex-wrap:wrap;gap:8px 12px;margin:0}
 .profile dl>div{border:1.5px solid var(--slate);border-radius:10px;padding:3px 12px;background:#fff}
 .profile dd{margin:0;font-weight:600;color:var(--ink);font-size:14.5px}
+.l-short{display:none}
+@media (max-width:560px){.l-short{display:inline}}
 @media (max-width:560px){.profile{padding:12px 16px 0}.p-name{border-right:0;padding-right:0;width:100%}}
 
 /* ---------- layout ---------- */
@@ -174,6 +176,8 @@ footer{padding:26px 28px 40px;text-align:center;font-size:13px;color:var(--slate
   .profile dt{font-size:9.5px}
   .profile dd{font-size:13px}
   .p-college{flex:1 1 100%}
+  .l-full{display:none}
+  .profile dl>div{padding:2px 8px}
   /* tables: narrower pinned column + tighter cells so more of the matrix is visible */
   table{font-size:13px}
   th,td{padding:7px 9px}
@@ -190,7 +194,7 @@ footer{padding:26px 28px 40px;text-align:center;font-size:13px;color:var(--slate
 </head>
 <body>
 <header class="topbar">
-  <div class="brand"><b>Java Lab Portfolio</b><span>9 modules · Roll No. 25EU02121</span></div>
+  <div class="brand"><b>Java Lab Portfolio</b><span>10 modules · 24CS202 · Roll No. 25EU02121</span></div>
   <label class="search" id="searchBox">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
     <input id="q" type="search" placeholder="Filter topics…" title="Try: super, finally, join, constructor" aria-label="Filter lab topics" autocomplete="off">
@@ -205,6 +209,9 @@ footer{padding:26px 28px 40px;text-align:center;font-size:13px;color:var(--slate
     <div><dt>Department</dt><dd>AI</dd></div>
     <div><dt>Branch</dt><dd>AI&amp;ML</dd></div>
     <div><dt>Section</dt><dd>B</dd></div>
+    <div class="p-course"><dt>Course</dt><dd>OOP through Java</dd></div>
+    <div><dt><span class="l-full">Course Code</span><span class="l-short">Code</span></dt><dd>24CS202</dd></div>
+    <div class="p-instr"><dt>Instructor</dt><dd>Dr. M. Ramesh</dd></div>
     <div class="p-college"><dt>College</dt><dd>Siddhartha Academy of Higher Education</dd></div>
   </dl>
 </section>
@@ -213,11 +220,11 @@ footer{padding:26px 28px 40px;text-align:center;font-size:13px;color:var(--slate
   <nav class="rail" aria-label="Module timeline">
     <h2>Lab timeline</h2>
     <ol class="timeline" id="timeline"></ol>
-    <p class="rail-note">Weeks 1–3 and 6–11 of the lab record, condensed into nine modules.</p>
+    <p class="rail-note">Weeks 1–3 and 6–12 of the lab record, condensed into ten modules.</p>
   </nav>
   <main id="main" tabindex="-1"></main>
 </div>
-<footer>Java Academic Portfolio · Sikhakolli Bhavyasri · Roll No. 25EU02121 · Dept. of AI · Branch AI&amp;ML · Section B<br>Siddhartha Academy of Higher Education</footer>
+<footer>Java Academic Portfolio · Sikhakolli Bhavyasri · Roll No. 25EU02121 · Dept. of AI · Branch AI&amp;ML · Section B<br>OOP through Java (24CS202) · Instructor: Dr. M. Ramesh<br>Siddhartha Academy of Higher Education</footer>
 
 <script>
 /* ================= DATA ================= */
@@ -1707,6 +1714,455 @@ Stage-2 has completed.
 Stage-3 has begun.
 Stage-3 has completed.
 All controlled sequencing stages have completed successfully.` }
+  ]},
+/* ---------------- 10 ---------------- */
+{ id:10, week:"Week 12", title:"Thread Priority, Synchronization & Lambdas",
+  lede:"Scheduling hints with thread priorities, thread-safe counters with synchronized, and concise functional code with lambda expressions.",
+  tags:["priority","synchronized","race condition","lambda","functional interface"],
+  concept:{ h:"Coordinating threads and writing behaviour as values", p:["Every thread has a priority from 1 (MIN) to 10 (MAX), with 5 (NORM) as the default. It is only a hint to the scheduler, so output order is never guaranteed. When threads share mutable data, count++ is not atomic, and updates can be lost in a race condition. Marking a method synchronized, or wrapping code in a synchronized block, lets one thread at a time hold the object's lock. A lambda expression is a short anonymous function that implements a functional interface (an interface with exactly one abstract method)."], pts:["synchronized on a method and synchronized(this) on a block both lock the same object monitor.","join() on each thread guarantees the final count is read only after both have finished.","Lambda syntax: (params) -> expression, or (params) -> { statements; return value; }.","Generics let one functional interface serve many types, for example DataManipulator<String> and DataManipulator<Integer>."], side:"Topics in this module", sidePts:["Thread priorities and execution order","Synchronized method vs block","Race condition demo and ticket booking","Lambdas: math, parameters, block bodies, generics","Lambdas with forEach, filter, sort and Thread"]},
+  topics:[
+   { t:"Thread priorities", note:"MIN_PRIORITY (1), NORM_PRIORITY (5) and MAX_PRIORITY (10) are assigned before start(). In this run the high-priority thread printed first, but priority only influences the scheduler.", tags:["setPriority","getPriority","MIN_PRIORITY","MAX_PRIORITY"], lang:"java",
+     code:R`class PriorityWorker extends Thread {
+    public PriorityWorker(String name) {
+        super(name);
+    }
+    @Override
+    public void run() {
+        System.out.println("Thread Name: " + getName() + " | Priority: " + getPriority());
+    }
+}
+
+public class ThreadPriority {
+    public static void main(String[] args) {
+        PriorityWorker t1 = new PriorityWorker("Low-Priority-Thread");
+        PriorityWorker t2 = new PriorityWorker("Normal-Priority-Thread");
+        PriorityWorker t3 = new PriorityWorker("High-Priority-Thread");
+
+        t1.setPriority(Thread.MIN_PRIORITY);
+        t2.setPriority(Thread.NORM_PRIORITY);
+        t3.setPriority(Thread.MAX_PRIORITY);
+
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}`,
+     log:R`C:\25EU02121>javac ThreadPriority.java
+
+C:\25EU02121>java ThreadPriority
+Thread Name: High-Priority-Thread | Priority: 10
+Thread Name: Low-Priority-Thread | Priority: 1
+Thread Name: Normal-Priority-Thread | Priority: 5` },
+   { t:"Priority and execution order", note:"Three threads run five steps each with a 10 ms sleep. The high-priority thread tends to lead each round, though the order of the other two can swap.", tags:["scheduling","Thread.sleep","interleaving"], lang:"java",
+     code:R`class OrderWorker extends Thread {
+    public OrderWorker(String name) {
+        super(name);
+    }
+    @Override
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            System.out.println(getName() + " executing step " + i);
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+}
+
+public class ThreadExecution {
+    public static void main(String[] args) {
+        OrderWorker low = new OrderWorker("LOW_PRIORITY");
+        OrderWorker norm = new OrderWorker("NORM_PRIORITY");
+        OrderWorker high = new OrderWorker("HIGH_PRIORITY");
+
+        low.setPriority(Thread.MIN_PRIORITY);
+        norm.setPriority(Thread.NORM_PRIORITY);
+        high.setPriority(Thread.MAX_PRIORITY);
+
+        low.start();
+        norm.start();
+        high.start();
+    }
+}`,
+     log:R`C:\25EU02121>javac ThreadExecution.java
+
+C:\25EU02121>java ThreadExecution
+HIGH_PRIORITY executing step 1
+LOW_PRIORITY executing step 1
+NORM_PRIORITY executing step 1
+HIGH_PRIORITY executing step 2
+NORM_PRIORITY executing step 2
+LOW_PRIORITY executing step 2
+HIGH_PRIORITY executing step 3
+LOW_PRIORITY executing step 3
+NORM_PRIORITY executing step 3
+HIGH_PRIORITY executing step 4
+NORM_PRIORITY executing step 4
+LOW_PRIORITY executing step 4
+HIGH_PRIORITY executing step 5
+NORM_PRIORITY executing step 5
+LOW_PRIORITY executing step 5` },
+   { t:"Synchronized method", note:"Two threads each add 1000 times to one shared counter. synchronized makes every increment atomic with respect to the object's lock, so no update is lost.", tags:["synchronized","monitor lock","join()"], lang:"java",
+     code:R`class SharedCounter {
+    private int count = 0;
+    public synchronized void increment() {
+        count++;
+    }
+    public int getCount() {
+        return count;
+    }
+}
+
+public class SynchronizedMethod {
+    public static void main(String[] args) throws InterruptedException {
+        SharedCounter counter = new SharedCounter();
+        Runnable task = () -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        };
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        t1.start();
+        t2.start();
+        t1.join();      // wait for both before reading the result
+        t2.join();
+        System.out.println("Final Count (Using Synchronized Method): " + counter.getCount());
+    }
+}`,
+     log:R`C:\25EU02121>javac SynchronizedMethod.java
+
+C:\25EU02121>java SynchronizedMethod
+Final Count (Using Synchronized Method): 2000` },
+   { t:"Synchronized block", note:"The same guarantee with a narrower critical section: only count++ is locked, and the lock object is this.", tags:["synchronized(this)","critical section"], lang:"java",
+     code:R`class BlockCounter {
+    private int count = 0;
+    public void increment() {
+        synchronized (this) {
+            count++;
+        }
+    }
+    public int getCount() {
+        return count;
+    }
+}
+
+public class SynchronizedBlock {
+    public static void main(String[] args) throws InterruptedException {
+        BlockCounter counter = new BlockCounter();
+        Runnable task = () -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        };
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println("Final Count (Using Synchronized Block): " + counter.getCount());
+    }
+}`,
+     log:R`C:\25EU02121>javac SynchronizedBlock.java
+
+C:\25EU02121>java SynchronizedBlock
+Final Count (Using Synchronized Block): 2000` },
+   { t:"Race condition: unsafe vs safe", note:"incrementUnsafe() can lose updates when two threads interleave read-modify-write steps, so its total may fall below 20000. This particular run happened to reach 20000, which is why the label says the result varies.", tags:["race condition","thread safety","lost update"], lang:"java",
+     code:R`class Counter {
+    public int count = 0;
+    public void incrementUnsafe() {
+        count++;                        // not atomic: read, add, write
+    }
+    public synchronized void incrementSafe() {
+        count++;
+    }
+}
+
+public class RaceCondition {
+    public static void main(String[] args) throws InterruptedException {
+        Counter unsafeCounter = new Counter();
+        Runnable unsafeTask = () -> {
+            for (int i = 0; i < 10000; i++) unsafeCounter.incrementUnsafe();
+        };
+        Thread t1 = new Thread(unsafeTask);
+        Thread t2 = new Thread(unsafeTask);
+        t1.start(); t2.start();
+        t1.join();  t2.join();
+        System.out.println("Unsafe Execution Count (Expected 20000, Actual varies): " + unsafeCounter.count);
+
+        Counter safeCounter = new Counter();
+        Runnable safeTask = () -> {
+            for (int i = 0; i < 10000; i++) safeCounter.incrementSafe();
+        };
+        Thread t3 = new Thread(safeTask);
+        Thread t4 = new Thread(safeTask);
+        t3.start(); t4.start();
+        t3.join();  t4.join();
+        System.out.println("Safe Execution Count (Guaranteed Output): " + safeCounter.count);
+    }
+}`,
+     log:R`C:\25EU02121>javac RaceCondition.java
+
+C:\25EU02121>java RaceCondition
+Unsafe Execution Count (Expected 20000, Actual varies): 20000
+Safe Execution Count (Guaranteed Output): 20000` },
+   { t:"Ticket booking system", note:"A synchronized bookTicket() checks and updates the seat count as one unit, so with 3 seats Alice and Charlie succeed and Bob is refused. Thread start order can differ between runs.", tags:["synchronized","shared resource","booking"], lang:"java",
+     code:R`class TicketBookingSystem {
+    private int totalSeats = 3;
+
+    public synchronized void bookTicket(String passengerName, int seatsRequested) {
+        System.out.println(passengerName + " is attempting to book " + seatsRequested + " seats.");
+
+        if (totalSeats >= seatsRequested) {
+            System.out.println("SUCCESS: " + seatsRequested + " seats confirmed for " + passengerName);
+            totalSeats -= seatsRequested;
+        } else {
+            System.out.println("FAILED: Sorry " + passengerName + ", not enough seats available.");
+        }
+        System.out.println("Remaining Seats in system: " + totalSeats + "\n");
+    }
+}
+
+public class TicketBooking {
+    public static void main(String[] args) {
+        TicketBookingSystem system = new TicketBookingSystem();
+        Thread client1 = new Thread(() -> system.bookTicket("Alice", 2));
+        Thread client2 = new Thread(() -> system.bookTicket("Bob", 2));
+        Thread client3 = new Thread(() -> system.bookTicket("Charlie", 1));
+        client1.start();
+        client2.start();
+        client3.start();
+    }
+}`,
+     log:R`C:\25EU02121>javac TicketBooking.java
+
+C:\25EU02121>java TicketBooking
+Alice is attempting to book 2 seats.
+SUCCESS: 2 seats confirmed for Alice
+Remaining Seats in system: 1
+
+Bob is attempting to book 2 seats.
+FAILED: Sorry Bob, not enough seats available.
+Remaining Seats in system: 1
+
+Charlie is attempting to book 1 seats.
+SUCCESS: 1 seats confirmed for Charlie
+Remaining Seats in system: 0
+` },
+   { t:"Lambda expressions: math operations", note:"One functional interface, four behaviours. Each lambda supplies the body of compute(). The divide lambda guards against division by zero with a ternary.", tags:["@FunctionalInterface","lambda","ternary"], lang:"java",
+     code:R`@FunctionalInterface
+interface MathOperation {
+    double compute(double x, double y);
+}
+
+public class LambdaMathDemo {
+    public static void main(String[] args) {
+        MathOperation add      = (a, b) -> a + b;
+        MathOperation subtract = (a, b) -> a - b;
+        MathOperation multiply = (a, b) -> a * b;
+        MathOperation divide   = (a, b) -> b != 0 ? a / b : Double.NaN;
+
+        System.out.println("10 + 5 = " + add.compute(10, 5));
+        System.out.println("10 - 5 = " + subtract.compute(10, 5));
+        System.out.println("10 * 5 = " + multiply.compute(10, 5));
+        System.out.println("10 / 5 = " + divide.compute(10, 5));
+    }
+}`,
+     log:R`C:\25EU02121>javac LambdaMathDemo.java
+
+C:\25EU02121>java LambdaMathDemo
+10 + 5 = 15.0
+10 - 5 = 5.0
+10 * 5 = 50.0
+10 / 5 = 2.0` },
+   { t:"Lambda parameters", note:"A single parameter needs no parentheses; several parameters are wrapped in them. Parameter types are inferred from the interface.", tags:["parameters","type inference"], lang:"java",
+     code:R`interface Greeting {
+    void sayHello(String name);
+}
+
+@FunctionalInterface
+interface VolumeCalculator {
+    int getVolume(int length, int width, int height);
+}
+
+public class LambdaParamsDemo {
+    public static void main(String[] args) {
+        Greeting greeting = user -> System.out.println("Welcome, " + user + "!");
+        greeting.sayHello("Alex");
+
+        VolumeCalculator calc = (l, w, h) -> l * w * h;
+        System.out.println("Box Volume: " + calc.getVolume(5, 4, 3));
+    }
+}`,
+     log:R`C:\25EU02121>javac LambdaParamsDemo.java
+
+C:\25EU02121>java LambdaParamsDemo
+Welcome, Alex!
+Box Volume: 60` },
+   { t:"Block lambda: factorial", note:"When the body needs several statements, use braces and an explicit return.", tags:["block lambda","return","loop"], lang:"java",
+     code:R`@FunctionalInterface
+interface FactorialInterface {
+    int computeFactorial(int n);
+}
+
+public class BlockLambda {
+    public static void main(String[] args) {
+        FactorialInterface factorial = (num) -> {
+            int result = 1;
+            for (int i = 1; i <= num; i++) {
+                result *= i;
+            }
+            return result;
+        };
+        System.out.println("Factorial of 5 is: " + factorial.computeFactorial(5));
+        System.out.println("Factorial of 6 is: " + factorial.computeFactorial(6));
+    }
+}`,
+     log:R`C:\25EU02121>javac BlockLambda.java
+
+C:\25EU02121>java BlockLambda
+Factorial of 5 is: 120
+Factorial of 6 is: 720` },
+   { t:"Block lambda: largest of two numbers", note:"An if-else inside a lambda body, returning from each branch.", tags:["block lambda","if-else"], lang:"java",
+     code:R`@FunctionalInterface
+interface MaxFinder {
+    int findMax(int num1, int num2);
+}
+
+public class LargestNumbers {
+    public static void main(String[] args) {
+        MaxFinder finder = (a, b) -> {
+            if (a > b) {
+                return a;
+            } else {
+                return b;
+            }
+        };
+        System.out.println("The largest number between 84 and 53 is: " + finder.findMax(84, 53));
+    }
+}`,
+     log:R`C:\25EU02121>javac LargestNumbers.java
+
+C:\25EU02121>java LargestNumbers
+The largest number between 84 and 53 is: 84` },
+   { t:"Generic functional interface: one parameter", note:"DataManipulator<T> works for any type, so the same interface drives a String transformation and an Integer one.", tags:["generics","T","toUpperCase"], lang:"java",
+     code:R`@FunctionalInterface
+interface DataManipulator<T> {
+    T alter(T item);
+}
+
+public class GenericSingleDemo {
+    public static void main(String[] args) {
+        DataManipulator<String> upperCase = input -> input.toUpperCase();
+        System.out.println("String Result: " + upperCase.alter("java code"));
+
+        DataManipulator<Integer> triple = input -> input * 3;
+        System.out.println("Integer Result: " + triple.alter(15));
+    }
+}`,
+     log:R`C:\25EU02121>javac GenericSingleDemo.java
+
+C:\25EU02121>java GenericSingleDemo
+String Result: JAVA CODE
+Integer Result: 45` },
+   { t:"Generic functional interface: two parameters", note:"ActionRunner<T> combines two values of the same type: joining strings with a hyphen and averaging doubles.", tags:["generics","binary operation"], lang:"java",
+     code:R`@FunctionalInterface
+interface ActionRunner<T> {
+    T execute(T v1, T v2);
+}
+
+public class GenericBinaryDemo {
+    public static void main(String[] args) {
+        ActionRunner<String> joinWithHyphen = (s1, s2) -> s1 + "-" + s2;
+        System.out.println("Joined Words: " + joinWithHyphen.execute("Object", "Oriented"));
+
+        ActionRunner<Double> average = (d1, d2) -> (d1 + d2) / 2;
+        System.out.println("Calculated Average: " + average.execute(45.5, 95.5));
+    }
+}`,
+     log:R`C:\25EU02121>javac GenericBinaryDemo.java
+
+C:\25EU02121>java GenericBinaryDemo
+Joined Words: Object-Oriented
+Calculated Average: 70.5` },
+   { t:"Lambdas with ArrayList: forEach and filter", note:"forEach takes a lambda for each element. A stream filter keeps only the cities starting with P or T.", tags:["ArrayList","forEach","stream","filter"], lang:"java",
+     code:R`import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class ArrayListLambda {
+    public static void main(String[] args) {
+        List<String> cities = new ArrayList<>(Arrays.asList("New York", "London", "Paris", "Tokyo", "Berlin"));
+
+        System.out.println("--- Displaying all cities ---");
+        cities.forEach(city -> System.out.println("City: " + city));
+
+        System.out.println("\n--- Filtering cities starting with 'P' or 'T' ---");
+        cities.stream()
+              .filter(city -> city.startsWith("P") || city.startsWith("T"))
+              .forEach(filteredCity -> System.out.println("Matched: " + filteredCity));
+    }
+}`,
+     log:R`C:\25EU02121>javac ArrayListLambda.java
+
+C:\25EU02121>java ArrayListLambda
+--- Displaying all cities ---
+City: New York
+City: London
+City: Paris
+City: Tokyo
+City: Berlin
+
+--- Filtering cities starting with 'P' or 'T' ---
+Matched: Paris
+Matched: Tokyo` },
+   { t:"Sorting with a lambda comparator", note:"List.sort accepts a Comparator, which is a functional interface, so a lambda can define the ordering.", tags:["sort","Comparator","compareTo"], lang:"java",
+     code:R`import java.util.*;
+
+public class LambdaSort {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(5, 2, 8, 1, 3);
+        List<String> names = Arrays.asList("Ravi", "Anu", "Kiran", "Bala");
+
+        // Sorting integers in ascending order
+        numbers.sort((a, b) -> a.compareTo(b));
+        // Sorting strings in alphabetical order
+        names.sort((a, b) -> a.compareTo(b));
+
+        System.out.println("Sorted Integers: " + numbers);
+        System.out.println("Sorted Strings: " + names);
+    }
+}`,
+     log:R`C:\25EU02121>javac LambdaSort.java
+
+C:\25EU02121>java LambdaSort
+Sorted Integers: [1, 2, 3, 5, 8]
+Sorted Strings: [Anu, Bala, Kiran, Ravi]` },
+   { t:"Creating a thread with a lambda", note:"Runnable is a functional interface, so the thread's task can be written inline instead of in a separate class.", tags:["Thread","Runnable","lambda"], lang:"java",
+     code:R`public class LambdaThread {
+    public static void main(String[] args) {
+        // Creating a thread using a lambda expression
+        Thread t = new Thread(() -> {
+            for (int i = 1; i <= 5; i++) {
+                System.out.println("Thread: " + i);
+            }
+        });
+
+        // Starting the thread
+        t.start();
+    }
+}`,
+     log:R`C:\25EU02121>javac LambdaThread.java
+
+C:\25EU02121>java LambdaThread
+Thread: 1
+Thread: 2
+Thread: 3
+Thread: 4
+Thread: 5` }
   ]}
 ];
 
@@ -1812,7 +2268,7 @@ function render(){
   main.innerHTML=`
   <header class="hero">
     <div class="bignum" aria-hidden="true">${String(m.id).padStart(2,"0")}</div>
-    <div><div class="wk">Module ${m.id} of 9 · ${esc(m.week)}</div><h1>${esc(m.title)}</h1></div>
+    <div><div class="wk">Module ${m.id} of ${MODULES.length} · ${esc(m.week)}</div><h1>${esc(m.title)}</h1></div>
     <p class="lede">${esc(m.lede)}</p>
     <div class="tags">${m.tags.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
   </header>
